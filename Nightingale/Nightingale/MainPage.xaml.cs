@@ -15,84 +15,89 @@ namespace Nightingale
 
         public void Init()
         {
-            barChart.BackgroundColor = Color.FromHex("#202020");
-            barChart.Entries = new List<ChartValue>
+            var entries = new List<ChartValue>
             {
                 new ChartValue
                 {
-                    Value = 547,
+                    Value = 8,
                     Label = "Torta",
                     Caption = "$ 547",
                 },
                 new ChartValue
                 {
-                    Value = 40,
+                    Value = 43,
                     Label = "Mouse",
                     //Caption = "$ 40",
                 },
                 new ChartValue
                 {
-                    Value = 345,
+                    Value = 24,
                     Label = "Teclado",
                     Caption = "$ 345",
                 },
                 new ChartValue
                 {
-                    Value = 121,
+                    Value = 36,
                     Label = "Monitor",
                     Caption = "$ 121",
                 },
                 new ChartValue
                 {
-                    Value = 95,
+                    Value = 29,
                     Label = "CPU",
                 },
                 new ChartValue
                 {
-                    Value = 77,
+                    Value = 12,
                     Label = "Variable"
                 },
                 new ChartValue
                 {
-                    Value = 780,
+                    Value = 40,
                     Label = "Telefono"
                 },
                  new ChartValue
                 {
-                    Value = 455,
+                    Value = 19,
                     Label = "Televisor"
                 },
                  new ChartValue
                 {
-                    Value = 589,
+                    Value = 31,
                     Label = "Repasador"
                 },
                  new ChartValue
                 {
-                    Value = 215,
+                    Value = 36,
                     Label = "XBOX"
                 },
                  new ChartValue
                 {
-                    Value = 365,
+                    Value = 13,
                     Label = "PSP"
                 },
                  new ChartValue
                 {
-                    Value = 155,
+                    Value = 40,
                     Label = "Auriculares"
                 },
                  new ChartValue
                 {
-                    Value = 280,
+                    Value = 18,
                     Label = "Parlantes"
                 },
                  new ChartValue
                 {
-                    Value = 85,
+                    Value = 26,
                     Label = "Amplificador"
                 },
             };
+
+            pieChart.BackgroundColor = Color.FromHex("#202020");
+            pieChart.Entries = entries;
+
+            barChart.BackgroundColor = Color.FromHex("#202020");
+            barChart.Entries = entries;
         }
     }
 }

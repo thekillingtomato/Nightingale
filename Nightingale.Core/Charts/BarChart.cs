@@ -1,6 +1,7 @@
 ﻿using Nightingale.Core.Shapes;
 using SkiaSharp;
 using System;
+using System.Linq;
 
 namespace Nightingale.Core.Charts
 {
@@ -20,6 +21,7 @@ namespace Nightingale.Core.Charts
         {
             spaceBetweenBars = (avaibleWidth / Entries.Count) / 4;
             barSize = (avaibleWidth - (spaceBetweenBars * (Entries.Count * 2))) / Entries.Count;
+            TextSize = Entries.Any(x => x.Label.Length > 10) ? 10 : 12;
 
             foreach (var entry in Entries)
             {
@@ -31,7 +33,7 @@ namespace Nightingale.Core.Charts
                 {
                     Color = !entry.Colour.Equals(SKColor.Empty) ? entry.Colour : palette.GetAvaibleColour(),
                     StrokeWidth = barSize,
-                    TextSize = 16
+                    TextSize = TextSize
                 };
                 var bar = new Bar(canvas, new SKPoint(xStartPoint, avaibleHeight), new SKPoint(xStartPoint, barHeight), paint, entry);                
 

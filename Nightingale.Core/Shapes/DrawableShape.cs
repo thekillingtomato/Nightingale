@@ -6,23 +6,17 @@ namespace Nightingale.Core.Shapes
     {
         protected SKCanvas canvas;
 
-        public DrawableShape(SKCanvas canvas, SKPoint x, SKPoint y, SKPaint paint)
+        public DrawableShape(SKCanvas canvas, SKPoint startingPoint, SKPaint paint)
         {
             this.canvas = canvas;
-            X = x;
-            Y = y;
+            StartingPoint = startingPoint;
             Paint = paint;
         }
 
-        public SKPoint X { get; }
-
-        public SKPoint Y { get; }
+        public SKPoint StartingPoint { get; }
 
         public SKPaint Paint { get; }
 
-        public virtual void Draw()
-        {
-            canvas.DrawLine(X, Y, Paint);
-        }
+        public abstract void Draw();
     }
 }

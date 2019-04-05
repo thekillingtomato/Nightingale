@@ -9,7 +9,10 @@ namespace Nightingale.Core
     public abstract class Chart : SKCanvasView
     {
         protected SKCanvas canvas;
+        protected SKImageInfo info;
+        protected SKSurface surface;
         protected float marginY = 80;
+        protected float marginX;
         protected float avaibleHeight;
         protected float avaibleWidth;
         protected PaletteColour palette = new PaletteColour();
@@ -19,6 +22,8 @@ namespace Nightingale.Core
             BackgroundColor = Color.Transparent;
             PaintSurface += OnPaintSurface;
         }
+
+        public float TextSize { get; set; } = 12;
 
         public List<ChartValue> Entries { get; set; }
 
@@ -31,10 +36,13 @@ namespace Nightingale.Core
         private void OnPaintSurface(object sender, SKPaintSurfaceEventArgs e)
         {
             canvas = e.Surface.Canvas;
+            surface = e.Surface;
+            info = e.Info;
             
             marginY = CanvasSize.Height * 20 / 100;
+            marginX = CanvasSize.Width * 5 / 100;
             avaibleHeight = CanvasSize.Height - marginY;
-            avaibleWidth = CanvasSize.Width;
+            avaibleWidth = CanvasSize.Width  - marginX;
 
             DrawChart();
         }
