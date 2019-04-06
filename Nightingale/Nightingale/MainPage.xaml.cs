@@ -19,7 +19,7 @@ namespace Nightingale
             {
                 new ChartValue
                 {
-                    Value = 8,
+                    Value = - 88,
                     Label = "Torta",
                     Caption = "$ 547",
                 },
@@ -78,7 +78,7 @@ namespace Nightingale
                 },
                  new ChartValue
                 {
-                    Value = 40,
+                    Value = -40,
                     Label = "Auriculares"
                 },
                  new ChartValue
@@ -88,7 +88,7 @@ namespace Nightingale
                 },
                  new ChartValue
                 {
-                    Value = 26,
+                    Value = -26,
                     Label = "Amplificador"
                 },
             };

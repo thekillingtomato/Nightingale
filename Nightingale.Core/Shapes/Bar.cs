@@ -24,13 +24,19 @@ namespace Nightingale.Core.Shapes
 
         private void DrawValueLabel()
         {
-            canvas.DrawText(Entry.IsCaptionEmpty() ? Entry.Value.ToString() : Entry.Caption, StartingPoint.X - (Paint.StrokeWidth / 2), EndingPoint.Y - 20, Paint);
+            canvas.DrawText(Entry.IsCaptionEmpty() ? Entry.Value.ToString() : Entry.Caption,
+                StartingPoint.X - (Paint.StrokeWidth / 2),
+                EndingPoint.Y - (Entry.Value > 0 ? 20 : -20),
+                Paint);
         }
 
         private void DrawEntryLabel()
         {
             float textOffset = Paint.StrokeWidth / 2;
-            canvas.DrawText(Entry.Label, StartingPoint.X - textOffset, StartingPoint.Y + 20, Paint);
+            canvas.DrawText(Entry.Label,
+                StartingPoint.X - textOffset,
+                StartingPoint.Y + (Entry.Value > 0 ? 20 : -20),
+                Paint);
         }
     }
 }

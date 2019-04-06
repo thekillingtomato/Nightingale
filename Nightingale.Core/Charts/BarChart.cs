@@ -19,6 +19,11 @@ namespace Nightingale.Core.Charts
 
         protected override void DrawChart()
         {
+            if(Entries.Any(x => x.Value < 0))
+            {
+                avaibleHeight = avaibleHeight / 2;
+            }
+
             spaceBetweenBars = (avaibleWidth / Entries.Count) / 4;
             barSize = (avaibleWidth - (spaceBetweenBars * (Entries.Count * 2))) / Entries.Count;
             TextSize = Entries.Any(x => x.Label.Length > 10) ? 10 : 12;
@@ -27,7 +32,7 @@ namespace Nightingale.Core.Charts
             {
                 float xStartPoint = (Entries.IndexOf(entry) * barSize + spaceBetweenBars) * 2;
 
-                var barHeight = CalculateYHeight(GetYPercentage(entry));
+                var barHeight = CalculateYHeight(entry);
 
                 var paint = new SKPaint
                 {
@@ -41,23 +46,16 @@ namespace Nightingale.Core.Charts
             }
         }
 
-
-        /// <summary>
-        /// Get the percentage to draw the bar from the bottom to the top
-        /// </summary>
-        /// <param name="entry"></param>
-        /// <returns></returns>
-        private float GetYPercentage(ChartValue entry) => entry.Value / ValuesRatio * 100 / avaibleHeight;
-
         /// <summary>
         /// Measures the value to be draw
         /// </summary>
         /// <param name="percentage"></param>
         /// <returns></returns>
-        private float CalculateYHeight(float percentage)
+        private float CalculateYHeight(ChartValue entry)
         {
+            var percentage = entry.Value / ValuesRatio * 100 / avaibleHeight;
             var increaseHeight = Math.Abs(percentage * (avaibleHeight - marginY) / 100);
-            return avaibleHeight - increaseHeight;
+            return avaibleHeight - (entry.Value > 0 ? increaseHeight : -increaseHeight);
         }
     }
 }

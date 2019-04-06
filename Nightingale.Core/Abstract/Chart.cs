@@ -29,7 +29,7 @@ namespace Nightingale.Core
 
         public float MaxEntryValue => Entries.Max(x => x.Value);
 
-        public float ValuesRatio => Entries.Max(x => x.Value) > avaibleHeight ? Entries.Max(x => x.Value) / avaibleHeight : 1;
+        public float ValuesRatio => Entries.Max(x => x.Value) / avaibleHeight;
 
         protected abstract void DrawChart();
 
