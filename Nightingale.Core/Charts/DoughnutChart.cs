@@ -17,7 +17,7 @@ namespace Nightingale.Core.Charts
                 var paint = new SKPaint
                 {
                     Style = SKPaintStyle.Stroke,
-                    StrokeWidth = 30,
+                    StrokeWidth = 40,
                     Color = colour,
                 };
 
