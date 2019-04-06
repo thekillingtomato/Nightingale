@@ -10,27 +10,21 @@ namespace Nightingale.Core.Charts
         {
             foreach (var entry in Entries)
             {
-                var yPoint = CanvasSize.Height - (CanvasSize.Height - 10) + (Entries.IndexOf(entry) + 1) * 20;
-                var xPoint = CanvasSize.Width - avaibleWidth;
-
-                var labelPosition = new SKPoint(xPoint, yPoint);
-
                 float sweepAngle = 360f * entry.Value / Entries.Sum(x => x.Value);
+
+                var colour = entry.HasColour() ? entry.Colour : palette.GetAvaibleColour();
 
                 var paint = new SKPaint
                 {
                     Style = SKPaintStyle.Stroke,
                     StrokeWidth = 30,
-                    Color = entry.HasColour() ? entry.Colour : palette.GetAvaibleColour(),
+                    Color = colour,
                 };
 
                 var arc = new Arc(canvas, paint, CenterRect, StartAngle, sweepAngle);
                 arc.Draw();
                 
-                paint.StrokeWidth = 0;
-                var text = $"{entry.Label} - {(entry.IsCaptionEmpty() ? entry.Value.ToString() : entry.Caption)}";
-                var reference = new ReferenceLabel(canvas, labelPosition, paint, text);
-                reference.Draw();
+                DrawLabel(entry, new SKPaint { Color = colour });
 
                 StartAngle += sweepAngle;
             }

@@ -5,14 +5,16 @@
              xmlns:charts="clr-namespace:Nightingale.Core.Charts;assembly=Nightingale.Core"
              x:Class="Nightingale.MainPage">
 
-    <StackLayout>
+    <ScrollView>
         <!-- Place new controls here -->
-        <Label Text="Welcome to Xamarin.Forms!" 
+        <StackLayout>
+            <Label Text="Welcome to Xamarin.Forms!" 
            HorizontalOptions="Start"
            VerticalOptions="Start" />
-        <charts:BarChart x:Name="barChart" HeightRequest="190" Margin="10,10,10,10" />
-        <!--<charts:DoughnutChart x:Name="doughnutChart" HeightRequest="390" Margin="10,10,10,10"/>-->
-        <charts:PieChart x:Name="pieChart" HeightRequest="390" Margin="10,10,10,10"/>
-    </StackLayout>
+            <charts:BarChart x:Name="barChart" HeightRequest="190" Margin="10,10,10,10" />
+            <charts:DoughnutChart x:Name="doughnutChart" HeightRequest="210" Margin="10,10,10,10"/>
+            <charts:PieChart x:Name="pieChart" HeightRequest="210" Margin="10,10,10,10"/>
+        </StackLayout>
+    </ScrollView>
 
 </ContentPage>

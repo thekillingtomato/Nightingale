@@ -71,26 +71,26 @@ namespace Nightingale
                     Value = 36,
                     Label = "XBOX"
                 },
-                 new ChartValue
-                {
-                    Value = 13,
-                    Label = "PSP"
-                },
-                 new ChartValue
-                {
-                    Value = -40,
-                    Label = "Auriculares"
-                },
-                 new ChartValue
-                {
-                    Value = 18,
-                    Label = "Parlantes"
-                },
-                 new ChartValue
-                {
-                    Value = -26,
-                    Label = "Amplificador"
-                },
+                // new ChartValue
+                //{
+                //    Value = 13,
+                //    Label = "PSP"
+                //},
+                // new ChartValue
+                //{
+                //    Value = -40,
+                //    Label = "Auriculares"
+                //},
+                // new ChartValue
+                //{
+                //    Value = 18,
+                //    Label = "Parlantes"
+                //},
+                // new ChartValue
+                //{
+                //    Value = -26,
+                //    Label = "Amplificador"
+                //},
             };
 
             pieChart.BackgroundColor = Color.FromHex("#202020");
@@ -98,6 +98,9 @@ namespace Nightingale
 
             barChart.BackgroundColor = Color.FromHex("#202020");
             barChart.Entries = entries;
+
+            doughnutChart.BackgroundColor = Color.FromHex("#202020");
+            doughnutChart.Entries = entries;
         }
     }
 }
