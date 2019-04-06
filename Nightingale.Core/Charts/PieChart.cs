@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace Nightingale.Core.Charts
 {
-    public class DoughnutChart : CircularChart
+    public class PieChart : CircularChart
     {
         protected override void DrawChart()
         {
@@ -24,9 +24,10 @@ namespace Nightingale.Core.Charts
                     Color = entry.HasColour() ? entry.Colour : palette.GetAvaibleColour(),
                 };
 
-                var arc = new Arc(canvas, paint, CenterRect, StartAngle, sweepAngle);
-                arc.Draw();
-                
+                var center = new SKPoint(Width.ToFloat() / 2, Height.ToFloat() / 2);
+                var slice = new Slice(canvas, paint, CenterRect, center, StartAngle, sweepAngle);
+                slice.Draw();
+
                 paint.StrokeWidth = 0;
                 var text = $"{entry.Label} - {(entry.IsCaptionEmpty() ? entry.Value.ToString() : entry.Caption)}";
                 var reference = new ReferenceLabel(canvas, labelPosition, paint, text);

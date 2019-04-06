@@ -11,7 +11,8 @@
            HorizontalOptions="Start"
            VerticalOptions="Start" />
         <charts:BarChart x:Name="barChart" HeightRequest="190" Margin="10,10,10,10" />
-        <charts:DoughnutChart x:Name="pieChart" HeightRequest="390" Margin="10,10,10,10"/>
+        <!--<charts:DoughnutChart x:Name="doughnutChart" HeightRequest="390" Margin="10,10,10,10"/>-->
+        <charts:PieChart x:Name="pieChart" HeightRequest="390" Margin="10,10,10,10"/>
     </StackLayout>
 
 </ContentPage>
