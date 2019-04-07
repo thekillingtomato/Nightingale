@@ -19,28 +19,29 @@ namespace Nightingale.Core.Charts
 
         protected override void DrawChart()
         {
-            if(Entries.Any(x => x.Value < 0))
+            // For negative values.
+            if(Values.Any(x => x.Value < 0))
             {
                 avaibleHeight = avaibleHeight / 2;
             }
 
-            spaceBetweenBars = (avaibleWidth / Entries.Count) / 4;
-            barSize = (avaibleWidth - (spaceBetweenBars * (Entries.Count * 2))) / Entries.Count;
-            TextSize = Entries.Any(x => x.Label.Length > 10) ? 10 : 12;
+            spaceBetweenBars = (avaibleWidth / Values.Count) / 4;
+            barSize = (avaibleWidth - (spaceBetweenBars * (Values.Count * 2))) / Values.Count;
+            TextSize = Values.Any(x => x.Label.Length > 10) ? 10 : 12;
 
-            foreach (var entry in Entries)
+            foreach (var value in Values)
             {
-                float xStartPoint = (Entries.IndexOf(entry) * barSize + spaceBetweenBars) * 2;
+                float xStartPoint = (Values.IndexOf(value) * barSize + spaceBetweenBars) * 2;
 
-                var barHeight = CalculateYHeight(entry);
+                var barHeight = CalculateYHeight(value);
 
                 var paint = new SKPaint
                 {
-                    Color = !entry.Colour.Equals(SKColor.Empty) ? entry.Colour : palette.GetAvaibleColour(),
+                    Color = !value.Colour.Equals(SKColor.Empty) ? value.Colour : palette.GetAvaibleColour(),
                     StrokeWidth = barSize,
                     TextSize = TextSize
                 };
-                var bar = new Bar(canvas, new SKPoint(xStartPoint, avaibleHeight), new SKPoint(xStartPoint, barHeight), paint, entry);                
+                var bar = new Bar(canvas, new SKPoint(xStartPoint, avaibleHeight), new SKPoint(xStartPoint, barHeight), paint, value);                
 
                 bar.Draw();
             }
@@ -49,13 +50,13 @@ namespace Nightingale.Core.Charts
         /// <summary>
         /// Measures the value to be draw
         /// </summary>
-        /// <param name="percentage"></param>
+        /// <param name="value"></param>
         /// <returns></returns>
-        private float CalculateYHeight(ChartValue entry)
+        private float CalculateYHeight(ChartValue value)
         {
-            var percentage = entry.Value / ValuesRatio * 100 / avaibleHeight;
+            var percentage = value.Value / ValuesRatio * 100 / avaibleHeight;
             var increaseHeight = Math.Abs(percentage * (avaibleHeight - marginY) / 100);
-            return avaibleHeight - (entry.Value > 0 ? increaseHeight : -increaseHeight);
+            return avaibleHeight - (value.Value > 0 ? increaseHeight : -increaseHeight);
         }
     }
 }

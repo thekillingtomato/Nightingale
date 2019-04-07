@@ -25,11 +25,11 @@ namespace Nightingale.Core
 
         public float TextSize { get; set; } = 12;
 
-        public List<ChartValue> Entries { get; set; }
+        public List<ChartValue> Values { get; set; }
 
-        public float MaxEntryValue => Entries.Max(x => x.Value);
+        public float MaxEntryValue => Values.Max(x => x.Value);
 
-        public float ValuesRatio => Entries.Max(x => x.Value) / avaibleHeight;
+        public float ValuesRatio => Values.Max(x => x.Value) / avaibleHeight;
 
         protected abstract void DrawChart();
 

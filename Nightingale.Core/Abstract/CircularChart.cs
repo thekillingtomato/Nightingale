@@ -15,20 +15,21 @@ namespace Nightingale.Core
 
         public float StartAngle { get; protected set; }
 
-        protected float GetYAxisForValue(ChartValue value)
-            => CanvasSize.Height - (CanvasSize.Height - 10) + (Entries.IndexOf(value) + (1 - Entries.IndexOf(value) % 2)) * 20;
+        protected float GetYAxisFor(ChartValue value)
+            => CanvasSize.Height - (CanvasSize.Height - 10) + (Values.IndexOf(value) + (1 - Values.IndexOf(value) % 2)) * 20;
 
-        protected float GetXAxisForValue(ChartValue value)
-            => Entries.IndexOf(value) % 2 == 0 ?
+        protected float GetXAxisFor(ChartValue value)
+            => Values.IndexOf(value) % 2 == 0 ?
                     CanvasSize.Width - avaibleWidth :
                     CanvasSize.Width - 20;
 
         protected void DrawLabel(ChartValue value, SKPaint paint)
         {
-            var labelPosition = new SKPoint(GetXAxisForValue(value), GetYAxisForValue(value));
+            var labelPosition = new SKPoint(GetXAxisFor(value), GetYAxisFor(value));
 
             var text = $"{value.Label} [{(value.IsCaptionEmpty() ? value.Value.ToString() : value.Caption)}]";
-            var reference = new ReferenceLabel(canvas, labelPosition, paint, text, Entries.IndexOf(value) % 2 == 0);
+
+            var reference = new ReferenceLabel(canvas, labelPosition, paint, text, Values.IndexOf(value) % 2 == 0);
             reference.Draw();
         }
     }

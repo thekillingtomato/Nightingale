@@ -8,9 +8,9 @@ namespace Nightingale.Core.Charts
     {
         protected override void DrawChart()
         {
-            foreach (var entry in Entries)
+            foreach (var entry in Values)
             {
-                float sweepAngle = 360f * entry.Value / Entries.Sum(x => x.Value);
+                float sweepAngle = 360f * entry.Value / Values.Sum(x => x.Value);
 
                 var paint = new SKPaint
                 {

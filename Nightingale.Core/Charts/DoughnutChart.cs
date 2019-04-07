@@ -8,11 +8,11 @@ namespace Nightingale.Core.Charts
     {
         protected override void DrawChart()
         {
-            foreach (var entry in Entries)
+            foreach (var value in Values)
             {
-                float sweepAngle = 360f * entry.Value / Entries.Sum(x => x.Value);
+                float sweepAngle = 360f * value.Value / Values.Sum(x => x.Value);
 
-                var colour = entry.HasColour() ? entry.Colour : palette.GetAvaibleColour();
+                var colour = value.HasColour() ? value.Colour : palette.GetAvaibleColour();
 
                 var paint = new SKPaint
                 {
@@ -24,7 +24,7 @@ namespace Nightingale.Core.Charts
                 var arc = new Arc(canvas, paint, CenterRect, StartAngle, sweepAngle);
                 arc.Draw();
                 
-                DrawLabel(entry, new SKPaint { Color = colour });
+                DrawLabel(value, new SKPaint { Color = colour });
 
                 StartAngle += sweepAngle;
             }

@@ -5,15 +5,13 @@ namespace Nightingale.Core.Shapes
     public class Slice : DrawableShape
     {
         private SKRect rect;
-        private SKPoint center;
 
         public Slice(SKCanvas canvas, SKPaint paint, SKRect rect, SKPoint center,float startingAngle, float endingAngle) 
-            : base(canvas, SKPoint.Empty, paint)
+            : base(canvas, center, paint)
         {
             StartingAngle = startingAngle;
             EndingAngle = endingAngle;
             this.rect = rect;
-            this.center = center;
         }
 
         public float StartingAngle { get; }
@@ -23,7 +21,7 @@ namespace Nightingale.Core.Shapes
         {
             using (SKPath path = new SKPath())
             {
-                path.MoveTo(center);
+                path.MoveTo(StartingPoint);
                 path.ArcTo(rect, StartingAngle, EndingAngle, false);
                 path.Close();
                 Paint.Style = SKPaintStyle.Fill;
