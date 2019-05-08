@@ -115,12 +115,15 @@ namespace Nightingale
 
             pieChart.BackgroundColor = Color.FromHex("#202020");
             pieChart.Values = entries;
+            pieChart.TextSize = 24;
 
             barChart.BackgroundColor = Color.FromHex("#202020");
             barChart.Values = entries;
+            barChart.TextSize = 25;
 
             doughnutChart.BackgroundColor = Color.FromHex("#202020");
             doughnutChart.Values = entries;
+            doughnutChart.TextSize = 26;
         }
     }
 }

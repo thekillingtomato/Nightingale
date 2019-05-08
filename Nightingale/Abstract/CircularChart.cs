@@ -16,7 +16,13 @@ namespace Nightingale
         public float StartAngle { get; protected set; }
 
         protected float GetYAxisFor(ChartValue value)
-            => CanvasSize.Height - (CanvasSize.Height - 10) + (Values.IndexOf(value) + (1 - Values.IndexOf(value) % 2)) * 20;
+        {
+            var margin = avaibleHeight / (Values.Count / 2);
+
+            var start = (Values.IndexOf(value) / 2) + 1;
+
+            return margin * start;
+        }
 
         protected float GetXAxisFor(ChartValue value)
             => Values.IndexOf(value) % 2 == 0 ?
@@ -28,6 +34,8 @@ namespace Nightingale
             var labelPosition = new SKPoint(GetXAxisFor(value), GetYAxisFor(value));
 
             var text = $"{value.Label} [{(value.IsCaptionEmpty() ? value.Value.ToString() : value.Caption)}]";
+
+            paint.TextSize = TextSize;
 
             var reference = new ReferenceLabel(canvas, labelPosition, paint, text, Values.IndexOf(value) % 2 == 0);
             reference.Draw();

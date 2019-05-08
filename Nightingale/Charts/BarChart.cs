@@ -27,7 +27,6 @@ namespace Nightingale.Charts
 
             spaceBetweenBars = (avaibleWidth / Values.Count) / 4;
             barSize = (avaibleWidth - (spaceBetweenBars * (Values.Count * 2))) / Values.Count;
-            TextSize = Values.Any(x => x.Label.Length > 10) ? 10 : 12;
 
             foreach (var value in Values)
             {
