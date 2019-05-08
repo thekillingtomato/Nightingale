@@ -2,6 +2,13 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
+    <PackageProjectUrl></PackageProjectUrl>
+    <RepositoryUrl>https://github.com/thekillingtomato/Nightingale</RepositoryUrl>
+    <Version>0.0.1</Version>
+    <Authors>Ramiro Di Rico</Authors>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <PackageId>Xamarin.Nightingale</PackageId>
+    <PackageLicenseUrl>https://github.com/thekillingtomato/Nightingale/blob/master/LICENSE.txt</PackageLicenseUrl>
   </PropertyGroup>
 
   <ItemGroup>
