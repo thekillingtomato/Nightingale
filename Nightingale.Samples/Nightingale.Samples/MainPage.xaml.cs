@@ -1,7 +1,8 @@
-﻿using Nightingale;
-using SkiaSharp;
+﻿using SkiaSharp;
 using System.Collections.Generic;
-using System.Linq;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
 using Xamarin.Forms;
 
 namespace Nightingale
@@ -12,12 +13,38 @@ namespace Nightingale
         {
             InitializeComponent();
 
-            Init();
+            BindingContext = new MainViewModel();
+        }
+    }
+
+    public class MainViewModel : INotifyPropertyChanged
+    {
+        public MainViewModel()
+        {
+            Task.Run(async () =>
+            {
+                await Task.Delay(1500);
+
+                Init();
+            });
         }
 
-        public void Init()
+        public List<ChartValue> Entries { get; set; }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected void OnPropertyChanged([CallerMemberName] string propertyName = "")
         {
-            var entries = new List<ChartValue>
+            var changed = PropertyChanged;
+            if (changed == null)
+                return;
+
+            changed.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        private void Init()
+        {
+            Entries = new List<ChartValue>
             {
                 new ChartValue
                 {
@@ -88,42 +115,10 @@ namespace Nightingale
                     Label = "XBOX",
                     Caption = "$ 450",
                     Colour = SKColors.Red
-                },
-                // new ChartValue
-                //{
-                //    Value = 13,
-                //    Label = "PSP"
-                //},
-                // new ChartValue
-                //{
-                //    Value = -40,
-                //    Label = "Auriculares"
-                //},
-                // new ChartValue
-                //{
-                //    Value = 18,
-                //    Label = "Parlantes"
-                //},
-                // new ChartValue
-                //{
-                //    Value = -26,
-                //    Label = "Amplificador"
-                //},
+                }
             };
 
-            var all = entries.Sum(x => x.Value);
-
-            pieChart.BackgroundColor = Color.FromHex("#202020");
-            pieChart.Values = entries;
-            pieChart.TextSize = 24;
-
-            barChart.BackgroundColor = Color.FromHex("#202020");
-            barChart.Values = entries;
-            barChart.TextSize = 25;
-
-            doughnutChart.BackgroundColor = Color.FromHex("#202020");
-            doughnutChart.Values = entries;
-            doughnutChart.TextSize = 26;
+            OnPropertyChanged(nameof(Entries));
         }
     }
 }

@@ -23,9 +23,16 @@ namespace Nightingale
             PaintSurface += OnPaintSurface;
         }
 
+        public static readonly BindableProperty ValuesProperty =
+            BindableProperty.Create(nameof(Values), typeof(List<ChartValue>), typeof(Chart), new List<ChartValue>(), propertyChanged: OnBindablePropertyChanged);
+
         public float TextSize { get; set; } = 12;
 
-        public List<ChartValue> Values { get; set; }
+        public List<ChartValue> Values
+        {
+            get => (List<ChartValue>)GetValue(ValuesProperty);
+            set => SetValue(ValuesProperty, value);
+        }
 
         public float MaxEntryValue => Values.Max(x => x.Value);
 
@@ -38,13 +45,21 @@ namespace Nightingale
             canvas = e.Surface.Canvas;
             surface = e.Surface;
             info = e.Info;
-            
+
             marginY = CanvasSize.Height * 20 / 100;
             marginX = CanvasSize.Width * 5 / 100;
             avaibleHeight = CanvasSize.Height - marginY;
-            avaibleWidth = CanvasSize.Width  - marginX;
+            avaibleWidth = CanvasSize.Width - marginX;
 
-            DrawChart();
+            if(Values.NotNullNorEmpty())
+            {
+                DrawChart();
+            }
+        }
+
+        static void OnBindablePropertyChanged(BindableObject sender, object oldValue, object newValue)
+        {
+            ((Chart)sender).InvalidateSurface();
         }
     }
 }
