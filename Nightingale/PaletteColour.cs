@@ -31,15 +31,13 @@ namespace Nightingale
             SKColors.SandyBrown
         };
 
-        public PaletteColour()
-        {
-        }
-
         public SKColor GetAvaibleColour()
         {
             var firstAvaible = colours.First();
             colours.Remove(firstAvaible);
             return firstAvaible;
         }
+
+        public IEnumerable<SKColor> GetColours(int take) => colours.Take(take);
     }
 }

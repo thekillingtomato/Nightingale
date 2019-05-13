@@ -12,7 +12,7 @@ namespace Nightingale.Charts
             {
                 float sweepAngle = 360f * value.Value / Values.Sum(x => x.Value);
 
-                var colour = value.HasColour() ? value.Colour : palette.GetAvaibleColour();
+                var colour = value.HasColour() ? value.Colour : GetDefaultColour(value);
 
                 var paint = new SKPaint
                 {

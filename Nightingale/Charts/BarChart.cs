@@ -36,7 +36,7 @@ namespace Nightingale.Charts
 
                 var paint = new SKPaint
                 {
-                    Color = !value.Colour.Equals(SKColor.Empty) ? value.Colour : palette.GetAvaibleColour(),
+                    Color = !value.Colour.Equals(SKColor.Empty) ? value.Colour : GetDefaultColour(value),
                     StrokeWidth = barSize,
                     TextSize = TextSize
                 };

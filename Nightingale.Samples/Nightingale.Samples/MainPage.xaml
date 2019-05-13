@@ -10,8 +10,12 @@
             <Label Text="Welcome to Xamarin.Forms!" 
            HorizontalOptions="Start"
            VerticalOptions="Start" />
-            <charts:BarChart x:Name="barChart" Values="{Binding Entries}" BackgroundColor="#202020"  HeightRequest="190" Margin="10,10,10,10" />
-            <charts:DoughnutChart x:Name="doughnutChart" Values="{Binding Entries}" BackgroundColor="#202020" HeightRequest="210" Margin="10,10,10,10"/>
+            <charts:BarChart x:Name="barChart" Values="{Binding Entries}" 
+                             BackgroundColor="#202020"  HeightRequest="190" Margin="10,10,10,10"
+                             TextSize="35"/>
+            <charts:DoughnutChart x:Name="doughnutChart" Values="{Binding Entries}" 
+                                  BackgroundColor="#202020" HeightRequest="210" Margin="10,10,10,10"
+                                  TextSize="35"/>
             <charts:PieChart x:Name="pieChart" Values="{Binding Entries}" BackgroundColor="#202020" HeightRequest="210" Margin="10,10,10,10"/>
         </StackLayout>
     </ScrollView>

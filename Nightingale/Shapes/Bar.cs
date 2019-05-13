@@ -33,9 +33,10 @@ namespace Nightingale.Shapes
         private void DrawEntryLabel()
         {
             float textOffset = Paint.StrokeWidth / 2;
+            var yOffset = Paint.TextSize + 20;
             canvas.DrawText(Entry.Label,
                 StartingPoint.X - textOffset,
-                StartingPoint.Y + (Entry.Value > 0 ? 20 : -20),
+                StartingPoint.Y + (Entry.Value > 0 ? yOffset : -yOffset),
                 Paint);
         }
     }

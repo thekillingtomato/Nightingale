@@ -16,6 +16,7 @@ namespace Nightingale
         protected float avaibleHeight;
         protected float avaibleWidth;
         protected PaletteColour palette = new PaletteColour();
+        protected IEnumerable<SKColor> defaultColours;
 
         public Chart()
         {
@@ -53,6 +54,8 @@ namespace Nightingale
 
             if(Values.NotNullNorEmpty())
             {
+                defaultColours = palette.GetColours(Values.Count);
+
                 DrawChart();
             }
         }
@@ -61,5 +64,7 @@ namespace Nightingale
         {
             ((Chart)sender).InvalidateSurface();
         }
+
+        protected SKColor GetDefaultColour(ChartValue value) => defaultColours.ElementAt(Values.IndexOf(value));
     }
 }

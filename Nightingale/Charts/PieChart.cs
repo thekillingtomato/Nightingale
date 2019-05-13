@@ -16,7 +16,7 @@ namespace Nightingale.Charts
                 {
                     Style = SKPaintStyle.Stroke,
                     StrokeWidth = 30,
-                    Color = entry.HasColour() ? entry.Colour : palette.GetAvaibleColour(),
+                    Color = entry.HasColour() ? entry.Colour : GetDefaultColour(entry),
                 };
 
                 var center = new SKPoint(CanvasSize.Width / 2, CanvasSize.Height / 2);

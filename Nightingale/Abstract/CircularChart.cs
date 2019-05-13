@@ -17,11 +17,11 @@ namespace Nightingale
 
         protected float GetYAxisFor(ChartValue value)
         {
-            var margin = avaibleHeight / (Values.Count / 2);
+            var margin = avaibleHeight / (20 / 2);
 
             var start = (Values.IndexOf(value) / 2) + 1;
 
-            return margin * start;
+            return TextSize * 2 * start;
         }
 
         protected float GetXAxisFor(ChartValue value)
