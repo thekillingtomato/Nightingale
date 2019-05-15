@@ -1,6 +1,7 @@
 ﻿using Nightingale.Shapes;
 using SkiaSharp;
 using System;
+using System.Linq;
 
 namespace Nightingale
 {
@@ -33,12 +34,14 @@ namespace Nightingale
         {
             var labelPosition = new SKPoint(GetXAxisFor(value), GetYAxisFor(value));
 
-            var text = $"{value.Label} [{(value.IsCaptionEmpty() ? value.Value.ToString() : value.Caption)}]";
+            var text = $"{value.Label} [{(value.IsCaptionEmpty() ? CalculatePercentage(value).ToString("F0") + "%": value.Caption)}]";
 
             paint.TextSize = TextSize;
 
             var reference = new ReferenceLabel(canvas, labelPosition, paint, text, Values.IndexOf(value) % 2 == 0);
             reference.Draw();
         }
+
+        protected float CalculatePercentage(ChartValue value) => value.Value * 100 / Values.Sum(x => x.Value);
     }
 }

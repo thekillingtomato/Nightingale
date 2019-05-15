@@ -51,21 +51,21 @@ namespace Nightingale
                 {
                     Value = 580,
                     Label = "Torta",
-                    Caption = "$ 580",
+                    //Caption = "$ 580",
                     Colour = SKColors.CadetBlue
                 },
                 new ChartValue
                 {
                     Value = 463,
                     Label = "Mouse",
-                    Caption = "$ 463",
+                    //Caption = "$ 463",
                     Colour = SKColors.Pink
                 },
                 new ChartValue
                 {
                     Value = 240,
                     Label = "Teclado",
-                    Caption = "$ 240",
+                    //Caption = "$ 240",
                     Colour = SKColors.Black
                 },
                 new ChartValue

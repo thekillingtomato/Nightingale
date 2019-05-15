@@ -38,7 +38,8 @@ namespace Nightingale.Charts
                 {
                     Color = !value.Colour.Equals(SKColor.Empty) ? value.Colour : GetDefaultColour(value),
                     StrokeWidth = barSize,
-                    TextSize = TextSize
+                    TextSize = TextSize,
+                    TextAlign = SKTextAlign.Center
                 };
                 var bar = new Bar(canvas, new SKPoint(xStartPoint, avaibleHeight), new SKPoint(xStartPoint, barHeight), paint, value);                
 

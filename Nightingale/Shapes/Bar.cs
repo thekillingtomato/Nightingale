@@ -25,17 +25,16 @@ namespace Nightingale.Shapes
         private void DrawValueLabel()
         {
             canvas.DrawText(Entry.IsCaptionEmpty() ? Entry.Value.ToString() : Entry.Caption,
-                StartingPoint.X - (Paint.StrokeWidth / 2),
-                EndingPoint.Y - (Entry.Value > 0 ? 20 : -20),
+                StartingPoint.X,
+                EndingPoint.Y - (Entry.Value > 0 ? Paint.TextSize : -Paint.TextSize),
                 Paint);
         }
 
         private void DrawEntryLabel()
         {
-            float textOffset = Paint.StrokeWidth / 2;
             var yOffset = Paint.TextSize + 20;
             canvas.DrawText(Entry.Label,
-                StartingPoint.X - textOffset,
+                StartingPoint.X,
                 StartingPoint.Y + (Entry.Value > 0 ? yOffset : -yOffset),
                 Paint);
         }
