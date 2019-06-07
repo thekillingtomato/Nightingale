@@ -37,8 +37,8 @@ namespace Nightingale
             var leftSide = Values.IndexOf(value) % 2 == 0;
 
             var text = leftSide ?
-                $"{value.Label} {(value.IsCaptionEmpty() ? CalculatePercentage(value).ToString("F0") + "%" : value.Caption)}" :
-                $"{(value.IsCaptionEmpty() ? CalculatePercentage(value).ToString("F0") + "%" : value.Caption)} {value.Label}";
+                $"{value.Label} {(UseCaption() ? value.Caption : CalculatePercentage(value).ToString("F0") + "%")}" :
+                $"{(UseCaption() ? value.Caption : CalculatePercentage(value).ToString("F0") + "%")} {value.Label}";
 
             paint.TextSize = TextSize;
 
