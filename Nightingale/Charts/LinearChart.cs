@@ -30,7 +30,7 @@ namespace Nightingale.Charts
                 var y = CalculateYHeight(value);
 
                 var point = new SKPoint(x, y);
-                canvas.DrawCircle(point, 5, paint);
+                canvas.DrawCircle(point, 25, paint);
 
                 points.Add(new Point { Value = point, Paint = paint });
             }
@@ -40,8 +40,9 @@ namespace Nightingale.Charts
                 var paint = new SKPaint
                 {
                     Color = SKColors.White,
-                    StrokeWidth = 2,
-                    Style = SKPaintStyle.Stroke
+                    StrokeWidth = 20,
+                    Style = SKPaintStyle.Stroke,
+                    StrokeJoin = SKStrokeJoin.Miter,
                 };
 
                 foreach (var point in points)
@@ -53,29 +54,12 @@ namespace Nightingale.Charts
                     }
 
                     path.LineTo(point.Value);
-                    
-                    if (!points.IndexOf(point).Equals(0) && !points.IndexOf(point).Equals(points.Count - 1))
-                    {
-                        var previousPoint = points.ElementAt(points.IndexOf(point) - 1);
-                        var skColours = new SKColor[]
-                        {
-                            previousPoint.Paint.Color,
-                            point.Paint.Color
-                        };
-
-                        paint.Shader = SKShader.CreateLinearGradient(previousPoint.Value,
-                            point.Value,
-                            skColours,
-                            null,
-                            SKShaderTileMode.Mirror);
-
-                        //path.ArcTo(point.Value, previousPoint.Value, 100);
-                    }
-                    
-                    canvas.DrawPath(path, paint);
                 }
 
-                //canvas.DrawPath(path, paint);
+                paint.Shader = SKShader.CreateLinearGradient(points.First().Value, points.Last().Value,
+                    points.Select(x => x.Paint.Color).ToArray(), null, SKShaderTileMode.Clamp);
+
+                canvas.DrawPath(path, paint);
             }
         }
 
