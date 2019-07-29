@@ -14,6 +14,13 @@ namespace Nightingale
         {
             InitializeComponent();
 
+            if (Device.Idiom.Equals(TargetIdiom.Phone))
+            {
+                barChart.TextSize = 24;
+                pieChart.TextSize = doughnutChart.TextSize = 34;
+                pieChart.HeightRequest = doughnutChart.HeightRequest = 150;
+            }
+
             BindingContext = new MainViewModel();
         }
     }
@@ -120,7 +127,7 @@ namespace Nightingale
             };
 
             Entries.ForEach(e => e.Colour = SKColor.Empty);
-            Entries = Entries.Take(3).ToList();
+            //Entries = Entries.Take(3).ToList();
 
             OnPropertyChanged(nameof(Entries));
         }

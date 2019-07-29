@@ -19,25 +19,11 @@ namespace Nightingale.Shapes
             if (drawLeftReference)
             {
                 canvas.DrawText(text, StartingPoint, Paint);
-                canvas.DrawCircle(StartingPoint.X - 10,
-                    StartingPoint.Y - 5,
-                    5,
-                    new SKPaint
-                    {
-                        Color = Paint.Color,
-                    });
             }
             else
             {
                 var width = Paint.MeasureText(text);
                 canvas.DrawText(text, StartingPoint.X - 20 - width, StartingPoint.Y, Paint);
-                canvas.DrawCircle(StartingPoint.X - 10,
-                    StartingPoint.Y - 5,
-                    5,
-                    new SKPaint
-                    {
-                        Color = Paint.Color,
-                    });
             }
         }
     }

@@ -34,11 +34,15 @@ namespace Nightingale
         {
             var labelPosition = new SKPoint(GetXAxisFor(value), GetYAxisFor(value));
 
-            var text = $"{value.Label} [{(value.IsCaptionEmpty() ? CalculatePercentage(value).ToString("F0") + "%": value.Caption)}]";
+            var leftSide = Values.IndexOf(value) % 2 == 0;
+
+            var text = leftSide ?
+                $"{value.Label} {(UseCaption() ? value.Caption : CalculatePercentage(value).ToString("F0") + "%")}" :
+                $"{(UseCaption() ? value.Caption : CalculatePercentage(value).ToString("F0") + "%")} {value.Label}";
 
             paint.TextSize = TextSize;
 
-            var reference = new ReferenceLabel(canvas, labelPosition, paint, text, Values.IndexOf(value) % 2 == 0);
+            var reference = new ReferenceLabel(canvas, labelPosition, paint, text, leftSide);
             reference.Draw();
         }
 

@@ -66,5 +66,7 @@ namespace Nightingale
         }
 
         protected SKColor GetDefaultColour(ChartValue value) => defaultColours.ElementAt(Values.IndexOf(value));
+
+        protected bool UseCaption() => Values.All(x => !string.IsNullOrEmpty(x.Caption));
     }
 }
