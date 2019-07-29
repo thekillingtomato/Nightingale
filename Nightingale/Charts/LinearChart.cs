@@ -1,63 +1,49 @@
 ﻿using SkiaSharp;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace Nightingale.Charts
 {
     public class LinearChart : Chart
     {
-        List<Point> points = new List<Point>();
-
         protected override void DrawChart()
         {
             canvas.Clear();
-
-            foreach (var value in Values)
-            {
-                var index = Values.IndexOf(value);
-
-                var paint = new SKPaint
-                {
-                    Color = !value.Colour.Equals(SKColor.Empty) ? value.Colour : GetDefaultColour(value),
-                    TextSize = TextSize,
-                    TextAlign = SKTextAlign.Center,
-                    StrokeWidth = 20,
-                };
-
-                var x = (avaibleWidth / Values.Count) * index + marginX;
-                var y = CalculateYHeight(value);
-
-                var point = new SKPoint(x, y);
-                canvas.DrawCircle(point, 25, paint);
-
-                points.Add(new Point { Value = point, Paint = paint });
-            }
 
             using (var path = new SKPath())
             {
                 var paint = new SKPaint
                 {
-                    Color = SKColors.White,
                     StrokeWidth = 20,
-                    Style = SKPaintStyle.Stroke,
-                    StrokeJoin = SKStrokeJoin.Miter,
+                    Style = SKPaintStyle.Stroke
                 };
 
-                foreach (var point in points)
+                var colors = new List<SKColor>();
+
+                foreach (var value in Values)
                 {
-                    if (points.IndexOf(point).Equals(0))
+                    var dotPaint = new SKPaint
                     {
-                        path.MoveTo(points.First().Value);
+                        Color = !value.Colour.Equals(SKColor.Empty) ? value.Colour : GetDefaultColour(value),
+                        StrokeWidth = 20,
+                    };
+
+                    colors.Add(dotPaint.Color);
+
+                    var point = CreatePoint(value);
+                    canvas.DrawCircle(point, 25, dotPaint);
+
+                    if (Values.IndexOf(value).Equals(0))
+                    {
+                        path.MoveTo(point);
                         continue;
                     }
 
-                    path.LineTo(point.Value);
+                    path.LineTo(point);
                 }
-
-                paint.Shader = SKShader.CreateLinearGradient(points.First().Value, points.Last().Value,
-                    points.Select(x => x.Paint.Color).ToArray(), null, SKShaderTileMode.Clamp);
+                
+                paint.Shader = SKShader.CreateLinearGradient(path.GetPoint(0), path.GetPoint(Values.Count - 1),
+                    colors.ToArray(), null, SKShaderTileMode.Clamp);
 
                 canvas.DrawPath(path, paint);
             }
@@ -69,12 +55,13 @@ namespace Nightingale.Charts
             var increaseHeight = Math.Abs(percentage * (avaibleHeight - marginY) / 100);
             return avaibleHeight - (value.Value > 0 ? increaseHeight : -increaseHeight);
         }
-    }
 
-    public class Point
-    {
-        public SKPoint Value { get; set; }
+        private SKPoint CreatePoint(ChartValue value)
+        {
+            var x = (avaibleWidth / Values.Count) * Values.IndexOf(value) + marginX;
+            var y = CalculateYHeight(value);
 
-        public SKPaint Paint { get; set; }
+            return new SKPoint(x, y);
+        }
     }
 }
