@@ -1,5 +1,6 @@
 ﻿using SkiaSharp;
 using SkiaSharp.Views.Forms;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Xamarin.Forms;
@@ -35,9 +36,9 @@ namespace Nightingale
             set => SetValue(ValuesProperty, value);
         }
 
-        public float MaxEntryValue => Values.Max(x => x.Value);
+        public float MaxEntryValue => Values.Max(x => Math.Abs(x.Value));
 
-        public float ValuesRatio => Values.Max(x => x.Value) / avaibleHeight;
+        public bool HasNegativeValues => Values.Any(x => x.Value < 0);
 
         protected abstract void DrawChart();
 

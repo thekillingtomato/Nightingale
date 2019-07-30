@@ -1,11 +1,12 @@
-﻿using Nightingale.Shapes;
+﻿using Nightingale.Abstract;
+using Nightingale.Shapes;
 using SkiaSharp;
 using System;
 using System.Linq;
 
 namespace Nightingale.Charts
 {
-    public class BarChart : Chart
+    public class BarChart : LinealChart
     {
         /// <summary>
         /// The space between bars is a quarter of a bar
@@ -19,12 +20,6 @@ namespace Nightingale.Charts
 
         protected override void DrawChart()
         {
-            // For negative values.
-            if(Values.Any(x => x.Value < 0))
-            {
-                avaibleHeight = avaibleHeight / 2;
-            }
-
             spaceBetweenBars = (avaibleWidth / Values.Count) / 4;
             barSize = (avaibleWidth - (spaceBetweenBars * (Values.Count * 2))) / Values.Count;
 
@@ -32,7 +27,7 @@ namespace Nightingale.Charts
             {
                 float xStartPoint = (Values.IndexOf(value) * barSize + spaceBetweenBars) * 2;
 
-                var barHeight = CalculateYHeight(value);
+                var barHeight = DistanceFromAxisY(value);
 
                 var paint = new SKPaint
                 {
@@ -41,22 +36,10 @@ namespace Nightingale.Charts
                     TextSize = TextSize,
                     TextAlign = SKTextAlign.Center
                 };
-                var bar = new Bar(canvas, new SKPoint(xStartPoint, avaibleHeight), new SKPoint(xStartPoint, barHeight), paint, value);                
+                var bar = new Bar(canvas, new SKPoint(xStartPoint, AxisY), new SKPoint(xStartPoint, barHeight), paint, value);                
 
                 bar.Draw();
             }
-        }
-
-        /// <summary>
-        /// Measures the value to be draw
-        /// </summary>
-        /// <param name="value"></param>
-        /// <returns></returns>
-        private float CalculateYHeight(ChartValue value)
-        {
-            var percentage = value.Value / ValuesRatio * 100 / avaibleHeight;
-            var increaseHeight = Math.Abs(percentage * (avaibleHeight - marginY) / 100);
-            return avaibleHeight - (value.Value > 0 ? increaseHeight : -increaseHeight);
         }
     }
 }

@@ -63,7 +63,7 @@ namespace Nightingale
                 },
                 new ChartValue
                 {
-                    Value = -463,
+                    Value = -4630,
                     Label = "Mouse",
                     //Caption = "$ 463",
                     Colour = SKColors.Pink
@@ -91,7 +91,7 @@ namespace Nightingale
                 },
                 new ChartValue
                 {
-                    Value = 1200,
+                    Value = -1200,
                     Label = "Variable",
                     Caption = "$ 1200",
                     Colour = SKColors.Yellow

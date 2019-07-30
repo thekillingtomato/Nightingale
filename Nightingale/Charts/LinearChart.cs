@@ -1,10 +1,12 @@
-﻿using SkiaSharp;
+﻿using Nightingale.Abstract;
+using SkiaSharp;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Nightingale.Charts
 {
-    public class LinearChart : Chart
+    public class LinearChart : LinealChart
     {
         protected override void DrawChart()
         {
@@ -54,17 +56,10 @@ namespace Nightingale.Charts
             }
         }
 
-        private float CalculateYHeight(ChartValue value)
-        {
-            var percentage = value.Value / ValuesRatio * 100 / avaibleHeight;
-            var increaseHeight = Math.Abs(percentage * (avaibleHeight - marginY) / 100);
-            return avaibleHeight - (value.Value > 0 ? increaseHeight : -increaseHeight);
-        }
-
         private SKPoint CreatePoint(ChartValue value)
         {
             var x = (avaibleWidth / Values.Count) * Values.IndexOf(value) + marginX;
-            var y = CalculateYHeight(value);
+            var y = DistanceFromAxisY(value);
 
             return new SKPoint(x, y);
         }
