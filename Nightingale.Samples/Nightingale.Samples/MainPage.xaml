@@ -7,12 +7,8 @@
     <ScrollView>
         <!-- Place new controls here -->
         <StackLayout>
-            <Label Text="Welcome to Xamarin.Forms!" 
-           HorizontalOptions="Start"
-           VerticalOptions="Start" />
             <charts:LinearChart x:Name="lineChart" Values="{Binding Entries}" 
-                             BackgroundColor="#202020"  HeightRequest="250" Margin="10,10,10,10"
-                             TextSize="35"/>
+                             BackgroundColor="#202020"  HeightRequest="250" Margin="10,10,10,10" TextSize="20"/>
             <charts:BarChart x:Name="barChart" Values="{Binding Entries}" 
                              BackgroundColor="#202020"  HeightRequest="250" Margin="10,10,10,10"/>
             <charts:DoughnutChart x:Name="doughnutChart" Values="{Binding Entries}" 

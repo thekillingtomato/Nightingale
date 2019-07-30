@@ -26,12 +26,17 @@ namespace Nightingale.Charts
                     {
                         Color = !value.Colour.Equals(SKColor.Empty) ? value.Colour : GetDefaultColour(value),
                         StrokeWidth = 20,
+                        TextSize = TextSize,
+                        TextAlign = SKTextAlign.Center
                     };
 
                     colors.Add(dotPaint.Color);
 
                     var point = CreatePoint(value);
                     canvas.DrawCircle(point, 25, dotPaint);
+
+                    canvas.DrawText(value.Label, new SKPoint(point.X, CanvasSize.Height - 40), dotPaint);
+                    canvas.DrawText(value.Value.ToString(), new SKPoint(point.X, CanvasSize.Height - 10), dotPaint);
 
                     if (Values.IndexOf(value).Equals(0))
                     {
