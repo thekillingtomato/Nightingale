@@ -8,12 +8,18 @@ namespace Nightingale.Abstract
 
         public float AxisY => HasNegativeValues ? avaibleHeight / 2 : avaibleHeight;
 
-        protected float DistanceFromAxisY(ChartValue value)
+        protected virtual float DistanceFromAxisY(ChartValue value)
         {
             var percentage = value.Value / IncreaseRatio * 100 / AxisY;
             var increaseHeight = Math.Abs(percentage * (AxisY - marginY) / 100);
             var result = AxisY - (value.Value > 0 ? increaseHeight : -increaseHeight);
             return result;
+        }
+
+        protected override void MeasureMargins()
+        {
+            base.MeasureMargins();
+            marginY = CanvasSize.Height * (HasNegativeValues ? 15 : 25) / 100;
         }
     }
 }

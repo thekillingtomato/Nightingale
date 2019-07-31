@@ -48,13 +48,11 @@ namespace Nightingale
             surface = e.Surface;
             info = e.Info;
 
-            marginY = CanvasSize.Height * 20 / 100;
-            marginX = CanvasSize.Width * 5 / 100;
-            avaibleHeight = CanvasSize.Height - marginY;
-            avaibleWidth = CanvasSize.Width - marginX;
-
-            if(Values.NotNullNorEmpty())
+            if (Values.NotNullNorEmpty())
             {
+                MeasureMargins();
+                MeasureRegionForDrawing();
+
                 defaultColours = palette.GetColours(Values.Count);
 
                 DrawChart();
@@ -69,5 +67,17 @@ namespace Nightingale
         protected SKColor GetDefaultColour(ChartValue value) => defaultColours.ElementAt(Values.IndexOf(value));
 
         protected bool UseCaption() => Values.All(x => !string.IsNullOrEmpty(x.Caption));
+
+        protected virtual void MeasureMargins()
+        {
+            marginY = CanvasSize.Height * 20 / 100;
+            marginX = CanvasSize.Width * 5 / 100;
+        }
+
+        protected virtual void MeasureRegionForDrawing()
+        {
+            avaibleHeight = CanvasSize.Height - marginY;
+            avaibleWidth = CanvasSize.Width - marginX;
+        }
     }
 }

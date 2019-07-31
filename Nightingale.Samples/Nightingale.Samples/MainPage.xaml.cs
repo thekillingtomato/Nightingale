@@ -63,14 +63,14 @@ namespace Nightingale
                 },
                 new ChartValue
                 {
-                    Value = -4630,
+                    Value = 5000,
                     Label = "Mouse",
                     //Caption = "$ 463",
                     Colour = SKColors.Pink
                 },
                 new ChartValue
                 {
-                    Value = 240,
+                    Value = 0,//240,
                     Label = "Teclado",
                     //Caption = "$ 240",
                     Colour = SKColors.Black
@@ -84,14 +84,14 @@ namespace Nightingale
                 },
                 new ChartValue
                 {
-                    Value = -1700,
+                    Value = 1700,
                     Label = "CPU",
                     Caption = "$ 1700",
                     Colour = SKColors.White
                 },
                 new ChartValue
                 {
-                    Value = -1200,
+                    Value = 1200,
                     Label = "Variable",
                     Caption = "$ 1200",
                     Colour = SKColors.Yellow
@@ -105,21 +105,21 @@ namespace Nightingale
                 },
                  new ChartValue
                 {
-                    Value = 5000,
+                    Value = -5000,
                     Label = "Televisor",
                     Caption = "$ 5000",
                     Colour = SKColors.Violet
                 },
                  new ChartValue
                 {
-                    Value = 60,
+                    Value = -60,
                     Label = "Repasador",
                     Caption = "$ 60",
                     Colour = SKColors.Blue
                 },
                  new ChartValue
                 {
-                    Value = 450,
+                    Value = -450,
                     Label = "XBOX",
                     Caption = "$ 450",
                     Colour = SKColors.Red
@@ -127,7 +127,7 @@ namespace Nightingale
             };
 
             Entries.ForEach(e => e.Colour = SKColor.Empty);
-            //Entries = Entries.Take(3).ToList();
+            //Entries = Entries.Where(x => x.Value >= 0).ToList();
 
             OnPropertyChanged(nameof(Entries));
         }
