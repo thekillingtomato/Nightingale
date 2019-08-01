@@ -59,7 +59,7 @@ namespace Nightingale.Charts
         private SKPoint CreatePoint(ChartValue value)
         {
             var x = (avaibleWidth / Values.Count) * Values.IndexOf(value) + marginX;
-            var y = DistanceFromAxisY(value);
+            var y = DistanceFromAxisX(value);
 
             return new SKPoint(x, y);
         }

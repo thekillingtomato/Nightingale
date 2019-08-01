@@ -40,6 +40,10 @@ namespace Nightingale
 
         public bool HasNegativeValues => Values.Any(x => x.Value < 0);
 
+        public bool AllNegatives => Values.All(x => x.Value < 0);
+
+        public bool AllPositive => Values.All(x => x.Value >= 0);
+
         protected abstract void DrawChart();
 
         private void OnPaintSurface(object sender, SKPaintSurfaceEventArgs e)

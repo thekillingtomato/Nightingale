@@ -127,7 +127,9 @@ namespace Nightingale
             };
 
             Entries.ForEach(e => e.Colour = SKColor.Empty);
+            Entries.ForEach(e => e.Value = -e.Value);
             //Entries = Entries.Where(x => x.Value >= 0).ToList();
+            Entries = Entries.Where(x => x.Value < 0).ToList();
 
             OnPropertyChanged(nameof(Entries));
         }
