@@ -1,8 +1,5 @@
 ﻿using Nightingale.Abstract;
-using Nightingale.Shapes;
 using SkiaSharp;
-using System;
-using System.Linq;
 
 namespace Nightingale.Charts
 {
