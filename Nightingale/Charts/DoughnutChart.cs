@@ -1,5 +1,4 @@
-﻿using Nightingale.Shapes;
-using SkiaSharp;
+﻿using SkiaSharp;
 using System.Linq;
 
 namespace Nightingale.Charts
@@ -21,9 +20,12 @@ namespace Nightingale.Charts
                     Color = colour,
                 };
 
-                var arc = new Arc(canvas, paint, CenterRect, StartAngle, sweepAngle);
-                arc.Draw();
-                
+                using (SKPath path = new SKPath())
+                {
+                    path.AddArc(CenterRect, StartAngle, sweepAngle);
+                    canvas.DrawPath(path, paint);
+                }
+
                 DrawLabel(value, new SKPaint { Color = colour });
 
                 StartAngle += sweepAngle;

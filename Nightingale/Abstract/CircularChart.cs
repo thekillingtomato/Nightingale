@@ -1,5 +1,4 @@
-﻿using Nightingale.Shapes;
-using SkiaSharp;
+﻿using SkiaSharp;
 using System;
 using System.Linq;
 
@@ -42,8 +41,15 @@ namespace Nightingale
 
             paint.TextSize = TextSize;
 
-            var reference = new ReferenceLabel(canvas, labelPosition, paint, text, leftSide);
-            reference.Draw();
+            if (leftSide)
+            {
+                canvas.DrawText(text, labelPosition, paint);
+            }
+            else
+            {
+                var width = paint.MeasureText(text);
+                canvas.DrawText(text, labelPosition.X - 20 - width, labelPosition.Y, paint);
+            }
         }
 
         protected float CalculatePercentage(ChartValue value) => value.Value * 100 / Values.Sum(x => x.Value);
