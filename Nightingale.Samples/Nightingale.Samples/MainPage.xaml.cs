@@ -70,7 +70,7 @@ namespace Nightingale
                 },
                 new ChartValue
                 {
-                    Value = 0,//240,
+                    Value = 240,
                     Label = "Teclado",
                     //Caption = "$ 240",
                     Colour = SKColors.Black
@@ -98,7 +98,7 @@ namespace Nightingale
                 },
                 new ChartValue
                 {
-                    Value = 3500,
+                    Value = 5000,
                     Label = "Telefono",
                     Caption = "$ 3500",
                     Colour = SKColors.Green
@@ -127,9 +127,10 @@ namespace Nightingale
             };
 
             Entries.ForEach(e => e.Colour = SKColor.Empty);
-            Entries.ForEach(e => e.Value = -e.Value);
-            //Entries = Entries.Where(x => x.Value >= 0).ToList();
-            Entries = Entries.Where(x => x.Value < 0).ToList();
+            //Entries.ForEach(e => e.Value = -e.Value);
+            Entries = Entries.Where(x => x.Value >= 0).ToList();
+            //Entries = Entries.Where(x => x.Value < 0).ToList();
+            //Entries = Entries.Take(3).ToList();
 
             OnPropertyChanged(nameof(Entries));
         }

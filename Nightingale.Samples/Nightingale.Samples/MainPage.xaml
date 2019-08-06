@@ -11,6 +11,8 @@
                              BackgroundColor="#202020"  HeightRequest="250" Margin="10,10,10,10" TextSize="20"/>
             <charts:BarChart x:Name="barChart" Values="{Binding Entries}" 
                              BackgroundColor="#202020"  HeightRequest="250" Margin="10,10,10,10"/>
+            <charts:LineChartWithArea x:Name="lineChartWArea" Values="{Binding Entries}" 
+                             BackgroundColor="#202020"  HeightRequest="250" Margin="10,10,10,10" TextSize="20"/>
             <charts:DoughnutChart x:Name="doughnutChart" Values="{Binding Entries}" 
                                   BackgroundColor="#202020" HeightRequest="210" Margin="10,10,10,10"/>
             <charts:PieChart x:Name="pieChart" Values="{Binding Entries}" BackgroundColor="#202020" HeightRequest="210" Margin="10,10,10,10"/>

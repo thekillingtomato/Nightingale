@@ -14,7 +14,7 @@ namespace Nightingale.Charts
             {
                 var paint = new SKPaint
                 {
-                    StrokeWidth = 20,
+                    StrokeWidth = 5,
                     Style = SKPaintStyle.Stroke
                 };
 
@@ -22,18 +22,12 @@ namespace Nightingale.Charts
 
                 foreach (var value in Values)
                 {
-                    var dotPaint = new SKPaint
-                    {
-                        Color = !value.Colour.Equals(SKColor.Empty) ? value.Colour : GetDefaultColour(value),
-                        StrokeWidth = 20,
-                        TextSize = TextSize,
-                        TextAlign = SKTextAlign.Center
-                    };
+                    var dotPaint = CreateDotPaint(value);
 
                     colors.Add(dotPaint.Color);
 
                     var point = CreatePoint(value);
-                    canvas.DrawCircle(point, 25, dotPaint);
+                    canvas.DrawCircle(point, 10, dotPaint);
 
                     canvas.DrawText(value.Label, new SKPoint(point.X, CanvasSize.Height - 40), dotPaint);
                     canvas.DrawText(value.Value.ToString(), new SKPoint(point.X, CanvasSize.Height - 10), dotPaint);

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SkiaSharp;
+using System;
 
 namespace Nightingale.Abstract
 {
@@ -22,6 +23,17 @@ namespace Nightingale.Abstract
         {
             base.MeasureMargins();
             marginY = CanvasSize.Height * (AllNegatives || AllPositive ? 25 : 15) / 100;
+        }
+
+        protected virtual SKPaint CreateDotPaint(ChartValue value)
+        {
+            return new SKPaint
+            {
+                Color = !value.Colour.Equals(SKColor.Empty) ? value.Colour : GetDefaultColour(value),
+                StrokeWidth = 20,
+                TextSize = TextSize,
+                TextAlign = SKTextAlign.Center
+            };
         }
     }
 }
