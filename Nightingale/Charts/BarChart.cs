@@ -22,7 +22,7 @@ namespace Nightingale.Charts
 
             foreach (var value in Series)
             {
-                float xStartPoint = (Series.IndexOf(value) * barSize + spaceBetweenBars) * 2;
+                float x = (Series.IndexOf(value) * barSize + spaceBetweenBars) * 2;
 
                 var barHeight = DistanceFromAxisX(value);
 
@@ -34,9 +34,9 @@ namespace Nightingale.Charts
                     TextAlign = SKTextAlign.Center
                 };
 
-                canvas.DrawLine(new SKPoint(xStartPoint, AxisX), new SKPoint(xStartPoint, barHeight), paint);
-                canvas.DrawText(value.Label, new SKPoint(xStartPoint, CanvasSize.Height - 40), paint);
-                canvas.DrawText(value.Value.ToString(), new SKPoint(xStartPoint, CanvasSize.Height - 10), paint);
+                canvas.DrawLine(new SKPoint(x, AxisX), new SKPoint(x, barHeight), paint);
+                canvas.DrawText(value.Label, new SKPoint(x, CanvasSize.Height - 40), paint);
+                canvas.DrawText(value.Value.ToString(), new SKPoint(x, CanvasSize.Height - 10), paint);
             }
         }
     }

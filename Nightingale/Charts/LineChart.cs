@@ -6,7 +6,7 @@ using Xamarin.Forms;
 
 namespace Nightingale.Charts
 {
-    public class LinearChart : LinealChart
+    public class LineChart : LinealChart
     {
         public bool RenderArea
         {
