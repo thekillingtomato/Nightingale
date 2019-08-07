@@ -11,7 +11,7 @@ namespace Nightingale.Abstract
             (AllNegatives || AllPositive ? marginY : avaibleHeight / 2) :
             avaibleHeight;
 
-        protected virtual float DistanceFromAxisX(ChartValue value)
+        protected virtual float DistanceFromAxisX(SeriesValue value)
         {
             var percentage = value.Value / IncreaseRatio * 100 / AxisX;
             var increaseHeight = Math.Abs(percentage * ((AllNegatives ? -avaibleHeight : -marginY) + AxisX) / 100);
@@ -25,7 +25,7 @@ namespace Nightingale.Abstract
             marginY = CanvasSize.Height * (AllNegatives || AllPositive ? 25 : 15) / 100;
         }
 
-        protected virtual SKPaint CreateDotPaint(ChartValue value)
+        protected virtual SKPaint CreateDotPaint(SeriesValue value)
         {
             return new SKPaint
             {
@@ -36,9 +36,9 @@ namespace Nightingale.Abstract
             };
         }
 
-        protected virtual SKPoint CreatePoint(ChartValue value)
+        protected virtual SKPoint CreatePoint(SeriesValue value)
         {
-            var x = (avaibleWidth / Values.Count) * Values.IndexOf(value) + marginX;
+            var x = (avaibleWidth / Series.Count) * Series.IndexOf(value) + marginX;
             var y = DistanceFromAxisX(value);
 
             return new SKPoint(x, y);

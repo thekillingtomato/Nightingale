@@ -15,25 +15,25 @@ namespace Nightingale
 
         public float StartAngle { get; protected set; }
 
-        protected float GetYAxisFor(ChartValue value)
+        protected float GetYAxisFor(SeriesValue value)
         {
             var margin = avaibleHeight / (20 / 2);
 
-            var start = (Values.IndexOf(value) / 2) + 1;
+            var start = (Series.IndexOf(value) / 2) + 1;
 
             return TextSize * 2 * start;
         }
 
-        protected float GetXAxisFor(ChartValue value)
-            => Values.IndexOf(value) % 2 == 0 ?
+        protected float GetXAxisFor(SeriesValue value)
+            => Series.IndexOf(value) % 2 == 0 ?
                     CanvasSize.Width - avaibleWidth :
                     CanvasSize.Width - 20;
 
-        protected void DrawLabel(ChartValue value, SKPaint paint)
+        protected void DrawLabel(SeriesValue value, SKPaint paint)
         {
             var labelPosition = new SKPoint(GetXAxisFor(value), GetYAxisFor(value));
 
-            var leftSide = Values.IndexOf(value) % 2 == 0;
+            var leftSide = Series.IndexOf(value) % 2 == 0;
 
             var text = leftSide ?
                 $"{value.Label} {(UseCaption() ? value.Caption : CalculatePercentage(value).ToString("F0") + "%")}" :
@@ -52,6 +52,6 @@ namespace Nightingale
             }
         }
 
-        protected float CalculatePercentage(ChartValue value) => value.Value * 100 / Values.Sum(x => x.Value);
+        protected float CalculatePercentage(SeriesValue value) => value.Value * 100 / Series.Sum(x => x.Value);
     }
 }

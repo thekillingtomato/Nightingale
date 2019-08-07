@@ -7,9 +7,9 @@ namespace Nightingale.Charts
     {
         protected override void DrawChart()
         {
-            foreach (var value in Values)
+            foreach (var value in Series)
             {
-                float sweepAngle = 360f * value.Value / Values.Sum(x => x.Value);
+                float sweepAngle = 360f * value.Value / Series.Sum(x => x.Value);
 
                 var colour = value.HasColour() ? value.Colour : GetDefaultColour(value);
 

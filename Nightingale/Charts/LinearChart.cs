@@ -1,48 +1,98 @@
 ﻿using Nightingale.Abstract;
 using SkiaSharp;
+using SkiaSharp.Views.Forms;
 using System.Linq;
+using Xamarin.Forms;
 
 namespace Nightingale.Charts
 {
     public class LinearChart : LinealChart
     {
+        public bool RenderArea
+        {
+            get => (bool)GetValue(RenderAreaProperty);
+            set => SetValue(RenderAreaProperty, value);
+        }
+
+        public static readonly BindableProperty RenderAreaProperty =
+            BindableProperty.Create(nameof(RenderArea), typeof(bool), typeof(Chart), false, propertyChanged: (BindableObject sender, object oldValue, object newValue) =>
+            {
+
+            });
+
         protected override void DrawChart()
         {
-            var elements = Values.Select(x => new
+            var elements = Series.Select(x => new
             {
-                DotPaint = CreateDotPaint(x),
-                Point = CreatePoint(x),
-                ChartValue = x
+                DotPaint = base.CreateDotPaint(x),
+                Point = base.CreatePoint(x),
+                SeriesValue = x
             }).ToList();
 
-            using (var path = new SKPath())
+            foreach (var element in elements)
             {
-                var paint = new SKPaint
-                {
-                    StrokeWidth = 5,
-                    Style = SKPaintStyle.Stroke
-                };
+                var currentIndex = elements.IndexOf(element);
 
-                foreach (var element in elements)
-                {
-                    canvas.DrawCircle(element.Point, 10, element.DotPaint);
-                    canvas.DrawText(element.ChartValue.Label, new SKPoint(element.Point.X, CanvasSize.Height - 40), element.DotPaint);
-                    canvas.DrawText(element.ChartValue.Value.ToString(), new SKPoint(element.Point.X, CanvasSize.Height - 10), element.DotPaint);
+                canvas.DrawCircle(element.Point, 10, element.DotPaint);
 
-                    if (Values.IndexOf(element.ChartValue).Equals(0))
+                canvas.DrawText(element.SeriesValue.Label, 
+                    new SKPoint(element.Point.X, CanvasSize.Height - 40),
+                    element.DotPaint);
+
+                canvas.DrawText(element.SeriesValue.Value.ToString(),
+                    new SKPoint(element.Point.X, CanvasSize.Height - 10),
+                    element.DotPaint);
+
+                if (currentIndex > 0)
+                {
+                    var previousElement = elements.ElementAt(currentIndex - 1);
+
+                    using (var path = new SKPath())
                     {
-                        path.MoveTo(element.Point);
-                        continue;
+                        path.AddPoly(new SKPoint[] { previousElement.Point, element.Point });
+                        var currentColors = new SKColor[] 
+                        {
+                            previousElement.DotPaint.Color,
+                            element.DotPaint.Color
+                        };
+
+                        canvas.DrawPath(path, CreateStrokePaint(currentColors, previousElement.Point, element.Point));
                     }
 
-                    path.LineTo(element.Point);
+                    if (RenderArea)
+                    {
+                        using (var path = new SKPath())
+                        {
+                            var p0 = new SKPoint(previousElement.Point.X, AxisX);
+                            var p1 = new SKPoint(element.Point.X, AxisX);
+
+                            path.AddPoly(new SKPoint[] { previousElement.Point, p0, p1, element.Point });
+
+                            var backgroundColor = BackgroundColor.ToSKColor();
+
+                            canvas.DrawPath(path, new SKPaint
+                            {
+                                Color = new SKColor(backgroundColor.Red.ChangeBy(10),
+                                                        backgroundColor.Green.ChangeBy(10),
+                                                        backgroundColor.Blue.ChangeBy(10)),
+                                BlendMode = SKBlendMode.Lighten
+                            });
+                        }
+                    }
                 }
-
-                paint.Shader = SKShader.CreateLinearGradient(path.GetPoint(0), path.GetPoint(Values.Count - 1),
-                    elements.Select(x => x.DotPaint.Color).ToArray(), null, SKShaderTileMode.Clamp);
-
-                canvas.DrawPath(path, paint);
             }
+        }
+
+        private SKPaint CreateStrokePaint(SKColor[] colors, SKPoint previousPoint, SKPoint point)
+        {
+            return new SKPaint
+            {
+                Style = SKPaintStyle.Stroke,
+                StrokeWidth = 5,
+                Shader = SKShader.CreateLinearGradient(previousPoint, point,
+                                            colors,
+                                            null, SKShaderTileMode.Clamp)
+            };
         }
     }
 }

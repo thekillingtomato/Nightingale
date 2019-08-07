@@ -7,15 +7,15 @@
     <ScrollView>
         <!-- Place new controls here -->
         <StackLayout>
-            <charts:LinearChart x:Name="lineChart" Values="{Binding Entries}" 
+            <charts:LinearChart x:Name="lineChart" Series="{Binding Entries}" 
                              BackgroundColor="#202020"  HeightRequest="250" Margin="10,10,10,10" TextSize="20"/>
-            <charts:BarChart x:Name="barChart" Values="{Binding Entries}" 
+            <charts:BarChart x:Name="barChart" Series="{Binding Entries}" 
                              BackgroundColor="#202020"  HeightRequest="250" Margin="10,10,10,10"/>
-            <charts:LineChartWithArea x:Name="lineChartWArea" Values="{Binding Entries}" 
-                             BackgroundColor="#202020"  HeightRequest="250" Margin="10,10,10,10" TextSize="20"/>
-            <charts:DoughnutChart x:Name="doughnutChart" Values="{Binding Entries}" 
+            <charts:LinearChart x:Name="lineChartWArea" Series="{Binding Entries}" RenderArea="True" 
+                             BackgroundColor="#202020" HeightRequest="250" Margin="10,10,10,10" TextSize="20"/>
+            <charts:DoughnutChart x:Name="doughnutChart" Series="{Binding Entries}" 
                                   BackgroundColor="#202020" HeightRequest="210" Margin="10,10,10,10"/>
-            <charts:PieChart x:Name="pieChart" Values="{Binding Entries}" BackgroundColor="#202020" HeightRequest="210" Margin="10,10,10,10"/>
+            <charts:PieChart x:Name="pieChart" Series="{Binding Entries}" BackgroundColor="#202020" HeightRequest="210" Margin="10,10,10,10"/>
         </StackLayout>
     </ScrollView>
 

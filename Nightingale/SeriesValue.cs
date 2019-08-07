@@ -2,7 +2,7 @@
 
 namespace Nightingale
 {
-    public class ChartValue
+    public class SeriesValue
     {
         public float Value { get; set; }
 

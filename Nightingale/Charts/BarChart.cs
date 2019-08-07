@@ -17,12 +17,12 @@ namespace Nightingale.Charts
 
         protected override void DrawChart()
         {
-            spaceBetweenBars = (avaibleWidth / Values.Count) / 4;
-            barSize = (avaibleWidth - (spaceBetweenBars * (Values.Count * 2))) / Values.Count;
+            spaceBetweenBars = (avaibleWidth / Series.Count) / 4;
+            barSize = (avaibleWidth - (spaceBetweenBars * (Series.Count * 2))) / Series.Count;
 
-            foreach (var value in Values)
+            foreach (var value in Series)
             {
-                float xStartPoint = (Values.IndexOf(value) * barSize + spaceBetweenBars) * 2;
+                float xStartPoint = (Series.IndexOf(value) * barSize + spaceBetweenBars) * 2;
 
                 var barHeight = DistanceFromAxisX(value);
 

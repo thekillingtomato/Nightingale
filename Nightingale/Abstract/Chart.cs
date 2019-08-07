@@ -25,24 +25,24 @@ namespace Nightingale
             PaintSurface += OnPaintSurface;
         }
 
-        public static readonly BindableProperty ValuesProperty =
-            BindableProperty.Create(nameof(Values), typeof(List<ChartValue>), typeof(Chart), new List<ChartValue>(), propertyChanged: OnBindablePropertyChanged);
+        public static readonly BindableProperty SeriesProperty =
+            BindableProperty.Create(nameof(Series), typeof(List<SeriesValue>), typeof(Chart), new List<SeriesValue>(), propertyChanged: OnBindablePropertyChanged);
 
         public float TextSize { get; set; } = 12;
 
-        public List<ChartValue> Values
+        public List<SeriesValue> Series
         {
-            get => (List<ChartValue>)GetValue(ValuesProperty);
-            set => SetValue(ValuesProperty, value);
+            get => (List<SeriesValue>)GetValue(SeriesProperty);
+            set => SetValue(SeriesProperty, value);
         }
 
-        public float MaxEntryValue => Values.Max(x => Math.Abs(x.Value));
+        public float MaxEntryValue => Series.Max(x => Math.Abs(x.Value));
 
-        public bool HasNegativeValues => Values.Any(x => x.Value < 0);
+        public bool HasNegativeValues => Series.Any(x => x.Value < 0);
 
-        public bool AllNegatives => Values.All(x => x.Value < 0);
+        public bool AllNegatives => Series.All(x => x.Value < 0);
 
-        public bool AllPositive => Values.All(x => x.Value >= 0);
+        public bool AllPositive => Series.All(x => x.Value >= 0);
 
         protected abstract void DrawChart();
 
@@ -54,12 +54,12 @@ namespace Nightingale
 
             canvas.Clear();
 
-            if (Values.NotNullNorEmpty())
+            if (Series.NotNullNorEmpty())
             {
                 MeasureMargins();
                 MeasureRegionForDrawing();
 
-                defaultColours = palette.GetColours(Values.Count);
+                defaultColours = palette.GetColours(Series.Count);
 
                 DrawChart();
             }
@@ -70,9 +70,9 @@ namespace Nightingale
             ((Chart)sender).InvalidateSurface();
         }
 
-        protected SKColor GetDefaultColour(ChartValue value) => defaultColours.ElementAt(Values.IndexOf(value));
+        protected SKColor GetDefaultColour(SeriesValue value) => defaultColours.ElementAt(Series.IndexOf(value));
 
-        protected bool UseCaption() => Values.All(x => !string.IsNullOrEmpty(x.Caption));
+        protected bool UseCaption() => Series.All(x => !string.IsNullOrEmpty(x.Caption));
 
         protected virtual void MeasureMargins()
         {

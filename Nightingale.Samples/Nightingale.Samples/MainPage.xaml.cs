@@ -37,7 +37,7 @@ namespace Nightingale
             });
         }
 
-        public List<ChartValue> Entries { get; set; }
+        public List<SeriesValue> Entries { get; set; }
 
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -52,72 +52,72 @@ namespace Nightingale
 
         private void Init()
         {
-            Entries = new List<ChartValue>
+            Entries = new List<SeriesValue>
             {
-                new ChartValue
+                new SeriesValue
                 {
                     Value = 580,
                     Label = "Torta",
                     //Caption = "$ 580",
                     Colour = SKColors.CadetBlue
                 },
-                new ChartValue
+                new SeriesValue
                 {
                     Value = 5000,
                     Label = "Mouse",
                     //Caption = "$ 463",
                     Colour = SKColors.Pink
                 },
-                new ChartValue
+                new SeriesValue
                 {
                     Value = 240,
                     Label = "Teclado",
                     //Caption = "$ 240",
                     Colour = SKColors.Black
                 },
-                new ChartValue
+                new SeriesValue
                 {
                     Value = 3600,
                     Label = "Monitor",
                     Caption = "$ 3600",
                     Colour = SKColors.Brown
                 },
-                new ChartValue
+                new SeriesValue
                 {
                     Value = 1700,
                     Label = "CPU",
                     Caption = "$ 1700",
                     Colour = SKColors.White
                 },
-                new ChartValue
+                new SeriesValue
                 {
                     Value = 1200,
                     Label = "Variable",
                     Caption = "$ 1200",
                     Colour = SKColors.Yellow
                 },
-                new ChartValue
+                new SeriesValue
                 {
                     Value = 5000,
                     Label = "Telefono",
                     Caption = "$ 3500",
                     Colour = SKColors.Green
                 },
-                 new ChartValue
+                 new SeriesValue
                 {
                     Value = -5000,
                     Label = "Televisor",
                     Caption = "$ 5000",
                     Colour = SKColors.Violet
                 },
-                 new ChartValue
+                 new SeriesValue
                 {
                     Value = -60,
                     Label = "Repasador",
                     Caption = "$ 60",
                     Colour = SKColors.Blue
                 },
-                 new ChartValue
+                 new SeriesValue
                 {
                     Value = -450,
                     Label = "XBOX",
@@ -128,7 +128,7 @@ namespace Nightingale
 
             Entries.ForEach(e => e.Colour = SKColor.Empty);
             //Entries.ForEach(e => e.Value = -e.Value);
-            Entries = Entries.Where(x => x.Value >= 0).ToList();
+            //Entries = Entries.Where(x => x.Value >= 0).ToList();
             //Entries = Entries.Where(x => x.Value < 0).ToList();
             //Entries = Entries.Take(3).ToList();
 
