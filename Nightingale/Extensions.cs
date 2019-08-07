@@ -15,8 +15,8 @@ namespace Nightingale
         public static byte ChangeBy(this byte value, int percentage)
         {
             return (byte)(value > 127 ?
-                value - (255 * 10 / 100):
-                value + (255 * 10 / 100));
+                value - (255 * percentage / 100):
+                value + (255 * percentage / 100));
         }
     }
 }

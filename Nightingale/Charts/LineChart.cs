@@ -72,9 +72,9 @@ namespace Nightingale.Charts
 
                             canvas.DrawPath(path, new SKPaint
                             {
-                                Color = new SKColor(backgroundColor.Red.ChangeBy(10),
-                                                        backgroundColor.Green.ChangeBy(10),
-                                                        backgroundColor.Blue.ChangeBy(10)),
+                                Color = new SKColor(backgroundColor.Red.ChangeBy(5),
+                                                        backgroundColor.Green.ChangeBy(5),
+                                                        backgroundColor.Blue.ChangeBy(5)),
                                 BlendMode = SKBlendMode.Lighten
                             });
                         }
