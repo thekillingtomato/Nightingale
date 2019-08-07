@@ -52,6 +52,8 @@ namespace Nightingale
             surface = e.Surface;
             info = e.Info;
 
+            canvas.Clear();
+
             if (Values.NotNullNorEmpty())
             {
                 MeasureMargins();

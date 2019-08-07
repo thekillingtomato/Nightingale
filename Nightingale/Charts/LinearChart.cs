@@ -1,6 +1,6 @@
 ﻿using Nightingale.Abstract;
 using SkiaSharp;
-using System.Collections.Generic;
+using System.Linq;
 
 namespace Nightingale.Charts
 {
@@ -8,7 +8,12 @@ namespace Nightingale.Charts
     {
         protected override void DrawChart()
         {
-            canvas.Clear();
+            var elements = Values.Select(x => new
+            {
+                DotPaint = CreateDotPaint(x),
+                Point = CreatePoint(x),
+                ChartValue = x
+            }).ToList();
 
             using (var path = new SKPath())
             {
@@ -18,42 +23,26 @@ namespace Nightingale.Charts
                     Style = SKPaintStyle.Stroke
                 };
 
-                var colors = new List<SKColor>();
-
-                foreach (var value in Values)
+                foreach (var element in elements)
                 {
-                    var dotPaint = CreateDotPaint(value);
+                    canvas.DrawCircle(element.Point, 10, element.DotPaint);
+                    canvas.DrawText(element.ChartValue.Label, new SKPoint(element.Point.X, CanvasSize.Height - 40), element.DotPaint);
+                    canvas.DrawText(element.ChartValue.Value.ToString(), new SKPoint(element.Point.X, CanvasSize.Height - 10), element.DotPaint);
 
-                    colors.Add(dotPaint.Color);
-
-                    var point = CreatePoint(value);
-                    canvas.DrawCircle(point, 10, dotPaint);
-
-                    canvas.DrawText(value.Label, new SKPoint(point.X, CanvasSize.Height - 40), dotPaint);
-                    canvas.DrawText(value.Value.ToString(), new SKPoint(point.X, CanvasSize.Height - 10), dotPaint);
-
-                    if (Values.IndexOf(value).Equals(0))
+                    if (Values.IndexOf(element.ChartValue).Equals(0))
                     {
-                        path.MoveTo(point);
+                        path.MoveTo(element.Point);
                         continue;
                     }
 
-                    path.LineTo(point);
+                    path.LineTo(element.Point);
                 }
-                
+
                 paint.Shader = SKShader.CreateLinearGradient(path.GetPoint(0), path.GetPoint(Values.Count - 1),
-                    colors.ToArray(), null, SKShaderTileMode.Clamp);
+                    elements.Select(x => x.DotPaint.Color).ToArray(), null, SKShaderTileMode.Clamp);
 
                 canvas.DrawPath(path, paint);
             }
-        }
-
-        private SKPoint CreatePoint(ChartValue value)
-        {
-            var x = (avaibleWidth / Values.Count) * Values.IndexOf(value) + marginX;
-            var y = DistanceFromAxisX(value);
-
-            return new SKPoint(x, y);
         }
     }
 }

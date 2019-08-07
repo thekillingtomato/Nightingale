@@ -10,10 +10,6 @@ namespace Nightingale.Charts
     {
         protected override void DrawChart()
         {
-            //using (var path = new SKPath())
-            //{
-            //    path.FillType = SKPathFillType.Winding;
-
             var paint = new SKPaint
             {
                 Style = SKPaintStyle.Fill
@@ -35,65 +31,25 @@ namespace Nightingale.Charts
                 canvas.DrawText(value.Label, new SKPoint(point.X, CanvasSize.Height - 40), dotPaint);
                 canvas.DrawText(value.Value.ToString(), new SKPoint(point.X, CanvasSize.Height - 10), dotPaint);
 
-                if (currentIndex.Equals(0))
+                if (currentIndex > 0)
                 {
-                    //path.MoveTo(point);
-                }
-                else
-                {
-                    var previous = points.ElementAt(currentIndex - 1);
+                    var previousPoint = points.ElementAt(currentIndex - 1);
+
+                    using (var path = ConcatLines(point, previousPoint))
+                    {
+                        canvas.DrawPath(path, FillShadowPaint());
+                    }
 
                     using (var path = new SKPath())
                     {
-                        path.FillType = SKPathFillType.Winding;
-                        
-                        var p0 = new SKPoint(previous.X, AxisX);
-                        var p1 = new SKPoint(point.X, AxisX);
+                        path.AddPoly(new SKPoint[] { previousPoint, point });
+                        var currentColors = new SKColor[] { colors.ElementAt(currentIndex - 1), colors.ElementAt(currentIndex) };
 
-                        path.AddPoly(new SKPoint[] { previous, p0, p1, point });
-
-                        paint.Shader = SKShader.CreateLinearGradient(p0, p1,
-                                            new SKColor[] { colors.ElementAt(currentIndex - 1), colors.ElementAt(currentIndex) },
-                                            null, SKShaderTileMode.Clamp);
-
-                        canvas.DrawPath(path, paint);
+                        canvas.DrawPath(path, CreateStrokePaint(currentColors, previousPoint, point));
                     }
-
-                    using(var linePath = new SKPath())
-                    {
-                        linePath.MoveTo(previous);
-                        linePath.LineTo(point);
-
-                        var background = BackgroundColor.ToSKColor();
-                        var inverse = new SKColor((byte)(byte.MaxValue - background.Red),
-                                                    (byte)(byte.MaxValue - background.Green),
-                                                    (byte)(byte.MaxValue - background.Blue));
-
-                        //canvas.DrawPath(linePath, new SKPaint
-                        //{
-                        //    StrokeWidth = 1,
-                        //    Color = inverse,
-                        //    Style = SKPaintStyle.Stroke
-                        //});
-                    }
-
                 }
                 points.Add(point);
             }
-
-            //paint.Shader = SKShader.CreateLinearGradient(path.GetPoint(1), path.GetPoint(Values.Count - 1),
-            //    colors.ToArray(), null, SKShaderTileMode.Clamp);
-
-            //canvas.DrawPath(path, paint);
-            //}
-        }
-
-        private SKPoint CreatePoint(ChartValue value)
-        {
-            var x = MeasureX(value);
-            var y = DistanceFromAxisX(value);
-
-            return new SKPoint(x, y);
         }
 
         private float MeasureX(ChartValue value)
@@ -101,5 +57,41 @@ namespace Nightingale.Charts
             var x = (avaibleWidth / Values.Count) * Values.IndexOf(value) + marginX;
             return x;
         }
+
+        private SKPaint CreateStrokePaint(SKColor[] colors, SKPoint previousPoint, SKPoint point)
+        {
+            return new SKPaint
+            {
+                Style = SKPaintStyle.Stroke,
+                StrokeWidth = 5,
+                Shader = SKShader.CreateLinearGradient(previousPoint, point,
+                                            colors,
+                                            null, SKShaderTileMode.Clamp)
+            };
+        }
+
+        private SKPath ConcatLines(SKPoint current, SKPoint previous)
+        {
+            var path = new SKPath();
+            var p0 = new SKPoint(previous.X, AxisX);
+            var p1 = new SKPoint(current.X, AxisX);
+
+            path.AddPoly(new SKPoint[] { previous, p0, p1, current });
+
+            return path;
+        }
+
+        private SKPaint FillShadowPaint()
+        {
+            var backgroundColor = BackgroundColor.ToSKColor();
+            var diff = (byte)(backgroundColor.Red + 20);
+
+            return new SKPaint
+            {
+                Color = new SKColor(diff, diff, diff),
+                BlendMode = SKBlendMode.Lighten
+            };
+        }
+
     }
 }
