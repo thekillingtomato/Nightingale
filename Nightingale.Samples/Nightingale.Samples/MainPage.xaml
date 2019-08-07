@@ -7,11 +7,11 @@
     <ScrollView>
         <!-- Place new controls here -->
         <StackLayout>
-            <charts:LinearChart x:Name="lineChart" Series="{Binding Entries}" 
+            <charts:LineChart x:Name="lineChart" Series="{Binding Entries}" 
                              BackgroundColor="#202020"  HeightRequest="250" Margin="10,10,10,10" TextSize="20"/>
             <charts:BarChart x:Name="barChart" Series="{Binding Entries}" 
                              BackgroundColor="#202020"  HeightRequest="250" Margin="10,10,10,10"/>
-            <charts:LinearChart x:Name="lineChartWArea" Series="{Binding Entries}" RenderArea="True" 
+            <charts:LineChart x:Name="lineChartWArea" Series="{Binding Entries}" RenderArea="True" 
                              BackgroundColor="#202020" HeightRequest="250" Margin="10,10,10,10" TextSize="20"/>
             <charts:DoughnutChart x:Name="doughnutChart" Series="{Binding Entries}" 
                                   BackgroundColor="#202020" HeightRequest="210" Margin="10,10,10,10"/>
