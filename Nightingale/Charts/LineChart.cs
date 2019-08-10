@@ -1,8 +1,10 @@
 ﻿using Nightingale.Abstract;
+using Nightingale.Figures;
 using SkiaSharp;
 using SkiaSharp.Views.Forms;
 using System.Linq;
 using Xamarin.Forms;
+using Point = Nightingale.Figures.Point;
 
 namespace Nightingale.Charts
 {
@@ -22,76 +24,45 @@ namespace Nightingale.Charts
 
         protected override void DrawChart()
         {
-            var elements = Series.Select(x => new
+            foreach (var shape in shapes)
             {
-                DotPaint = base.CreateDotPaint(x),
-                Point = base.CreatePoint(x),
-                SeriesValue = x
-            }).ToList();
+                var p = shape as Point;
+                p.Draw();
 
-            foreach (var element in elements)
-            {
-                var currentIndex = elements.IndexOf(element);
-
-                canvas.DrawCircle(element.Point, 10, element.DotPaint);
-
-                canvas.DrawText(element.SeriesValue.Label, 
-                    new SKPoint(element.Point.X, CanvasSize.Height - 40),
-                    element.DotPaint);
-
-                canvas.DrawText(element.SeriesValue.Value.ToString(),
-                    new SKPoint(element.Point.X, CanvasSize.Height - 10),
-                    element.DotPaint);
+                var currentIndex = shapes.IndexOf(shape);
 
                 if (currentIndex > 0)
                 {
-                    var previousElement = elements.ElementAt(currentIndex - 1);
-
-                    using (var path = new SKPath())
-                    {
-                        path.AddPoly(new SKPoint[] { previousElement.Point, element.Point });
-                        var currentColors = new SKColor[] 
-                        {
-                            previousElement.DotPaint.Color,
-                            element.DotPaint.Color
-                        };
-
-                        canvas.DrawPath(path, CreateStrokePaint(currentColors, previousElement.Point, element.Point));
-                    }
+                    p.DrawLines();
+                    var previousElement = shapes.ElementAt(currentIndex - 1) as Point;
 
                     if (RenderArea)
                     {
-                        using (var path = new SKPath())
-                        {
-                            var p0 = new SKPoint(previousElement.Point.X, AxisX);
-                            var p1 = new SKPoint(element.Point.X, AxisX);
-
-                            path.AddPoly(new SKPoint[] { previousElement.Point, p0, p1, element.Point });
-
-                            var backgroundColor = BackgroundColor.ToSKColor();
-
-                            canvas.DrawPath(path, new SKPaint
-                            {
-                                Color = new SKColor(backgroundColor.Red.ChangeBy(5),
-                                                        backgroundColor.Green.ChangeBy(5),
-                                                        backgroundColor.Blue.ChangeBy(5)),
-                                BlendMode = SKBlendMode.Lighten
-                            });
-                        }
+                        p.DrawShadowArea(BackgroundColor.ToSKColor(), AxisX);
                     }
                 }
             }
         }
 
-        private SKPaint CreateStrokePaint(SKColor[] colors, SKPoint previousPoint, SKPoint point)
+        public override Shape Create(SeriesValue value)
         {
-            return new SKPaint
+            var dotPaint = CreateDotPaint(value);
+            var point = CreatePoint(value);
+
+            if (!value.Focused && shapeTouched)
             {
-                Style = SKPaintStyle.Stroke,
-                StrokeWidth = 5,
-                Shader = SKShader.CreateLinearGradient(previousPoint, point,
-                                            colors,
-                                            null, SKShaderTileMode.Clamp)
+                SKBlurStyle blurStyle = SKBlurStyle.Normal;
+                dotPaint.MaskFilter = SKMaskFilter.CreateBlur(blurStyle, sigma);
+            }
+
+            return new Point(canvas)
+            {
+                Paint = dotPaint,
+                Value = point,
+                SerieValue = value,
+                LabelPosition = new SKPoint(point.X, CanvasSize.Height - 40),
+                ValuePosition = new SKPoint(point.X, CanvasSize.Height - 10),
+                Related = shapes.Count > 0 ? shapes.Last() as Point : null
             };
         }
     }

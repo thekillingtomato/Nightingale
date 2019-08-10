@@ -12,6 +12,8 @@ namespace Nightingale
 
         public SKColor Colour { get; set; }
 
+        public bool Focused { get; set; }
+
         public bool IsCaptionEmpty() => string.IsNullOrEmpty(Caption);
 
         public bool HasColour() => !Colour.Equals(SKColors.Empty);

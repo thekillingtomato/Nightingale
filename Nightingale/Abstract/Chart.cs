@@ -1,8 +1,10 @@
-﻿using SkiaSharp;
+﻿using Nightingale.Figures;
+using SkiaSharp;
 using SkiaSharp.Views.Forms;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Xamarin.Forms;
 
 namespace Nightingale
@@ -18,11 +20,17 @@ namespace Nightingale
         protected float avaibleWidth;
         protected PaletteColour palette = new PaletteColour();
         protected IEnumerable<SKColor> defaultColours;
+        protected List<Shape> shapes = new List<Shape>();
+        protected bool shapeTouched;
+        protected float sigma;
+        protected int fullSigma = 10;
 
         public Chart()
         {
             BackgroundColor = Color.Transparent;
             PaintSurface += OnPaintSurface;
+            EnableTouchEvents = true;
+            Touch += Chart_Touch;
         }
 
         public static readonly BindableProperty SeriesProperty =
@@ -61,13 +69,28 @@ namespace Nightingale
 
                 defaultColours = palette.GetColours(Series.Count);
 
+                PopulateShapes();
+
                 DrawChart();
-            }
+            }            
         }
+
+        public virtual void PopulateShapes()
+        {
+            shapes.Clear();
+
+            shapes.AddRange(Series.Select(x => Create(x)));
+        }
+
+        public abstract Shape Create(SeriesValue value);
 
         static void OnBindablePropertyChanged(BindableObject sender, object oldValue, object newValue)
         {
-            ((Chart)sender).InvalidateSurface();
+            if (newValue == null) return;
+
+            var chart = ((Chart)sender);
+
+            chart.InvalidateSurface();
         }
 
         protected SKColor GetDefaultColour(SeriesValue value) => defaultColours.ElementAt(Series.IndexOf(value));
@@ -84,6 +107,39 @@ namespace Nightingale
         {
             avaibleHeight = CanvasSize.Height - marginY;
             avaibleWidth = CanvasSize.Width - marginX;
+        }
+
+        protected async Task AnimatedDraw()
+        {
+            sigma = 0;
+            for (int i = 0; i < fullSigma; i++)
+            {
+                await Task.Delay(25);
+
+                sigma += (float)i / 4;
+                InvalidateSurface();
+            }
+        }
+
+        private void Chart_Touch(object sender, SKTouchEventArgs e)
+        {
+            if (e.ActionType.Equals(SKTouchAction.Pressed))
+            {
+                foreach (var shape in shapes)
+                {
+                    shape.Focused = shape.ContainsPoint(e.Location);
+                }
+
+                shapeTouched = shapes.Any(x => x.Focused);
+                if (shapeTouched)
+                {
+                    Task.Run(async () => await AnimatedDraw());
+                }
+                else
+                {
+                    InvalidateSurface();
+                }
+            }
         }
     }
 }

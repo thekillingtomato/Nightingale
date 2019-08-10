@@ -1,34 +1,68 @@
-﻿using SkiaSharp;
+﻿using Nightingale.Figures;
+using SkiaSharp;
 using System.Linq;
 
 namespace Nightingale.Charts
 {
     public class DoughnutChart : CircularChart
     {
+        public override Shape Create(SeriesValue seriesValue)
+        {
+            float sweepAngle = 360f * seriesValue.Value / Series.Sum(x => x.Value);
+            var paint = new SKPaint
+            {
+                StrokeWidth = 40,
+                Style = SKPaintStyle.Stroke,
+                Color = seriesValue.HasColour() ? seriesValue.Colour : GetDefaultColour(seriesValue),
+            };
+
+            var labelPosition = new SKPoint(GetXAxisFor(seriesValue), GetYAxisFor(seriesValue));
+            var leftSide = Series.IndexOf(seriesValue) % 2 == 0;
+
+            var text = leftSide ?
+                        $"{seriesValue.Label} {(UseCaption() ? seriesValue.Caption : CalculatePercentage(seriesValue).ToString("F0") + "%")}" :
+                        $"{(UseCaption() ? seriesValue.Caption : CalculatePercentage(seriesValue).ToString("F0") + "%")} {seriesValue.Label}";
+
+            if (!leftSide)
+            {
+                var width = paint.MeasureText(text);
+                labelPosition = new SKPoint(labelPosition.X - 20 - width, labelPosition.Y);
+            }
+
+            var textPaint = new SKPaint { Color = paint.Color };
+
+            if (Series.IndexOf(seriesValue) > 0)
+            {
+                var previous = shapes.Last() as Arc;
+                StartAngle += previous.SweepAngle;
+            }
+
+            if (!seriesValue.Focused && shapeTouched)
+            {
+                SKBlurStyle blurStyle = SKBlurStyle.Normal;
+                paint.MaskFilter = SKMaskFilter.CreateBlur(blurStyle, sigma);
+                textPaint.MaskFilter = paint.MaskFilter;
+            }
+
+            return new Arc(canvas)
+            {
+                SerieValue = seriesValue,
+                CenterRect = CenterRect,
+                Paint = paint,
+                LabelPosition = labelPosition,
+                StartAngle = StartAngle,
+                SweepAngle = sweepAngle,
+                Text = text,
+                TextPaint = textPaint
+            };
+        }
+
         protected override void DrawChart()
         {
-            foreach (var value in Series)
+            StartAngle = 0;
+            foreach (var shape in shapes)
             {
-                float sweepAngle = 360f * value.Value / Series.Sum(x => x.Value);
-
-                var colour = value.HasColour() ? value.Colour : GetDefaultColour(value);
-
-                var paint = new SKPaint
-                {
-                    Style = SKPaintStyle.Stroke,
-                    StrokeWidth = 40,
-                    Color = colour,
-                };
-
-                using (SKPath path = new SKPath())
-                {
-                    path.AddArc(CenterRect, StartAngle, sweepAngle);
-                    canvas.DrawPath(path, paint);
-                }
-
-                DrawLabel(value, new SKPaint { Color = colour });
-
-                StartAngle += sweepAngle;
+                shape.Draw();
             }
         }
     }
