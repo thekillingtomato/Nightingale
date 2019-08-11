@@ -15,10 +15,6 @@ namespace Nightingale
         protected SKCanvas canvas;
         protected SKImageInfo info;
         protected SKSurface surface;
-        protected float marginY = 80;
-        protected float marginX;
-        protected float avaibleHeight;
-        protected float avaibleWidth;
         protected PaletteColour palette = new PaletteColour();
         protected IEnumerable<SKColor> defaultColours;
         protected bool shapeTouched;
@@ -57,6 +53,8 @@ namespace Nightingale
 
         protected abstract void DrawChart();
 
+        public abstract Shape Create(SeriesValue value);
+
         private void OnPaintSurface(object sender, SKPaintSurfaceEventArgs e)
         {
             canvas = e.Surface.Canvas;
@@ -67,9 +65,6 @@ namespace Nightingale
 
             if (Series.NotNullNorEmpty())
             {
-                MeasureMargins();
-                MeasureRegionForDrawing();
-
                 calculationFactory = CreateFactory();
 
                 defaultColours = palette.GetColours(Series.Count);
@@ -80,10 +75,7 @@ namespace Nightingale
             }            
         }
 
-        internal virtual MainCalculationFactory CreateFactory()
-        {
-            return new MainCalculationFactory(this);
-        }
+        internal virtual MainCalculationFactory CreateFactory() => new MainCalculationFactory(this);
 
         public virtual void PopulateShapes()
         {
@@ -92,32 +84,9 @@ namespace Nightingale
             Shapes.AddRange(Series.Select(x => Create(x)));
         }
 
-        public abstract Shape Create(SeriesValue value);
-
-        static void OnBindablePropertyChanged(BindableObject sender, object oldValue, object newValue)
-        {
-            if (newValue == null) return;
-
-            var chart = (Chart)sender;
-
-            chart.InvalidateSurface();
-        }
-
         protected SKColor GetDefaultColour(SeriesValue value) => defaultColours.ElementAt(Series.IndexOf(value));
 
         protected bool UseCaption() => Series.All(x => !string.IsNullOrEmpty(x.Caption));
-
-        protected virtual void MeasureMargins()
-        {
-            marginY = CanvasSize.Height * 20 / 100;
-            marginX = CanvasSize.Width * 5 / 100;
-        }
-
-        protected virtual void MeasureRegionForDrawing()
-        {
-            avaibleHeight = CanvasSize.Height - marginY;
-            avaibleWidth = CanvasSize.Width - marginX;
-        }
 
         protected async Task AnimatedBlur()
         {
@@ -150,6 +119,15 @@ namespace Nightingale
                     InvalidateSurface();
                 }
             }
+        }
+
+        static void OnBindablePropertyChanged(BindableObject sender, object oldValue, object newValue)
+        {
+            if (newValue == null) return;
+
+            var chart = (Chart)sender;
+
+            chart.InvalidateSurface();
         }
     }
 }

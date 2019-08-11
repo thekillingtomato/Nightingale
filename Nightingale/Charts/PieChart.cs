@@ -17,6 +17,12 @@ namespace Nightingale.Charts
                 Color = seriesValue.HasColour() ? seriesValue.Colour : GetDefaultColour(seriesValue),
             };
 
+            var textPaint = new SKPaint
+            {
+                Color = paint.Color,
+                TextSize = TextSize
+            };
+
             var labelPosition = new SKPoint(factory.CalculateLabelXAxis(seriesValue), factory.CalculateLabelYAxis(seriesValue));
             var leftSide = Series.IndexOf(seriesValue) % 2 == 0;
 
@@ -26,11 +32,9 @@ namespace Nightingale.Charts
 
             if (!leftSide)
             {
-                var width = paint.MeasureText(text);
-                labelPosition = new SKPoint(labelPosition.X - 20 - width, labelPosition.Y);
+                var width = textPaint.MeasureText(text);
+                labelPosition = new SKPoint(labelPosition.X - width, labelPosition.Y);
             }
-
-            var textPaint = new SKPaint { Color = paint.Color };
 
             if (!seriesValue.Focused && shapeTouched)
             {

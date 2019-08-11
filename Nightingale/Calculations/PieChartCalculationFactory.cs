@@ -37,7 +37,7 @@ namespace Nightingale.Calculations
 
         public float CalculateLabelXAxis(SeriesValue value)
             => chart.Series.IndexOf(value) % 2 == 0 ?
-                    chart.CanvasSize.Width - AvaibleWidth :
+                    MarginX :
                     chart.CanvasSize.Width - 20;
 
         public float CalculateLabelYAxis(SeriesValue value)

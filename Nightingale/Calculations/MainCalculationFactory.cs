@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Nightingale.Calculations
+﻿namespace Nightingale.Calculations
 {
     internal class MainCalculationFactory
     {
