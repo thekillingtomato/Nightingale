@@ -3,7 +3,7 @@ using System;
 
 namespace Nightingale.Figures
 {
-    public class Point : Shape
+    internal class Point : Shape
     {
         public Point(SKCanvas canvas) : base(canvas)
         {
@@ -34,7 +34,7 @@ namespace Nightingale.Figures
                 Paint);
         }
 
-        public void DrawLines()
+        public void JoinPoints()
         {
             if (Related == null) return;
 

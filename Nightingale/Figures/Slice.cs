@@ -2,7 +2,7 @@
 
 namespace Nightingale.Figures
 {
-    public class Slice : Shape
+    internal class Slice : Shape
     {
         public Slice(SKCanvas canvas) : base(canvas)
         {

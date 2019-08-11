@@ -1,4 +1,5 @@
-﻿using Nightingale.Figures;
+﻿using Nightingale.Calculations;
+using Nightingale.Figures;
 using SkiaSharp;
 using SkiaSharp.Views.Forms;
 using System;
@@ -24,6 +25,7 @@ namespace Nightingale
         protected bool shapeTouched;
         protected float sigma;
         protected int fullSigma = 10;
+        internal MainCalculationFactory calculationFactory;
 
         public Chart()
         {
@@ -67,12 +69,19 @@ namespace Nightingale
                 MeasureMargins();
                 MeasureRegionForDrawing();
 
+                calculationFactory = CreateFactory();
+
                 defaultColours = palette.GetColours(Series.Count);
 
                 PopulateShapes();
 
                 DrawChart();
             }            
+        }
+
+        internal virtual MainCalculationFactory CreateFactory()
+        {
+            return new MainCalculationFactory(this);
         }
 
         public virtual void PopulateShapes()
@@ -88,7 +97,7 @@ namespace Nightingale
         {
             if (newValue == null) return;
 
-            var chart = ((Chart)sender);
+            var chart = (Chart)sender;
 
             chart.InvalidateSurface();
         }
@@ -109,7 +118,7 @@ namespace Nightingale
             avaibleWidth = CanvasSize.Width - marginX;
         }
 
-        protected async Task AnimatedDraw()
+        protected async Task AnimatedBlur()
         {
             sigma = 0;
             for (int i = 0; i < fullSigma; i++)
@@ -133,7 +142,7 @@ namespace Nightingale
                 shapeTouched = shapes.Any(x => x.Focused);
                 if (shapeTouched)
                 {
-                    Task.Run(async () => await AnimatedDraw());
+                    Task.Run(async () => await AnimatedBlur());
                 }
                 else
                 {

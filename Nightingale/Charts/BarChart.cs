@@ -1,35 +1,21 @@
-﻿using Nightingale.Abstract;
+﻿using Nightingale.Calculations;
 using Nightingale.Figures;
 using SkiaSharp;
 
 namespace Nightingale.Charts
 {
-    public class BarChart : LinealChart
+    public class BarChart : Chart
     {
-        /// <summary>
-        /// The space between bars is a quarter of a bar
-        /// </summary>
-        protected float spaceBetweenBars;
-
-        /// <summary>
-        /// Calculate the width of a bar by calculating the total width with how many entries and the space between all bars
-        /// </summary>
-        protected float barSize;
+        internal override MainCalculationFactory CreateFactory() => new BarChartCalculationFactory(this);
 
         public override Shape Create(SeriesValue value)
         {
-            float x = (Series.IndexOf(value) * barSize + spaceBetweenBars) * 2;
-
-            var middleWidth = barSize / 2;
-            var left = x - middleWidth;
-            var right = x + middleWidth;
-            var bottom = AxisX;
-            var top = DistanceFromAxisX(value);
+            var factory = calculationFactory as BarChartCalculationFactory;
 
             var paint = new SKPaint
             {
                 Color = !value.Colour.Equals(SKColor.Empty) ? value.Colour : GetDefaultColour(value),
-                StrokeWidth = barSize,
+                StrokeWidth = factory.BarSize,
                 TextSize = TextSize,
                 TextAlign = SKTextAlign.Center
             };
@@ -40,12 +26,19 @@ namespace Nightingale.Charts
                 paint.MaskFilter = SKMaskFilter.CreateBlur(blurStyle, sigma);
             }
 
+            var barStartingPoint = factory.CalculateBarStartingPoint(Series.IndexOf(value));
+
+            var left = factory.CalculateLeft(barStartingPoint);
+            var right = factory.CalculateRight(barStartingPoint);
+            var bottom = calculationFactory.AxisX;
+            var top = factory.CalculateTop(value);
+
             var shape = new Bar(canvas)
             {
                 Paint = paint,
                 Rect = new SKRect(left, top, right, bottom),
-                LabelPosition = new SKPoint(x, CanvasSize.Height - 40),
-                ValuePosition = new SKPoint(x, CanvasSize.Height - 10),
+                LabelPosition = new SKPoint(barStartingPoint, CanvasSize.Height - 40),
+                ValuePosition = new SKPoint(barStartingPoint, CanvasSize.Height - 10),
                 SerieValue = value
             };
 
@@ -58,14 +51,6 @@ namespace Nightingale.Charts
             {
                 shape.Draw();
             }
-        }
-
-        protected override void MeasureRegionForDrawing()
-        {
-            base.MeasureRegionForDrawing();
-
-            spaceBetweenBars = (avaibleWidth / Series.Count) / 4;
-            barSize = (avaibleWidth - (spaceBetweenBars * (Series.Count * 2))) / Series.Count;
         }
     }
 }

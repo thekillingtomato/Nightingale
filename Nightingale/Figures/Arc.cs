@@ -2,7 +2,7 @@
 
 namespace Nightingale.Figures
 {
-    public class Arc : Shape
+    internal class Arc : Shape
     {
         public Arc(SKCanvas canvas) : base(canvas)
         {

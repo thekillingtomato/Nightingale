@@ -1,4 +1,4 @@
-﻿using Nightingale.Abstract;
+﻿using Nightingale.Calculations;
 using Nightingale.Figures;
 using SkiaSharp;
 using SkiaSharp.Views.Forms;
@@ -8,7 +8,7 @@ using Point = Nightingale.Figures.Point;
 
 namespace Nightingale.Charts
 {
-    public class LineChart : LinealChart
+    public class LineChart : Chart
     {
         public bool RenderArea
         {
@@ -22,6 +22,8 @@ namespace Nightingale.Charts
 
             });
 
+        internal override MainCalculationFactory CreateFactory() => new LineCalculationFactory(this);
+
         protected override void DrawChart()
         {
             foreach (var shape in shapes)
@@ -33,12 +35,12 @@ namespace Nightingale.Charts
 
                 if (currentIndex > 0)
                 {
-                    p.DrawLines();
+                    p.JoinPoints();
                     var previousElement = shapes.ElementAt(currentIndex - 1) as Point;
 
                     if (RenderArea)
                     {
-                        p.DrawShadowArea(BackgroundColor.ToSKColor(), AxisX);
+                        p.DrawShadowArea(BackgroundColor.ToSKColor(), calculationFactory.AxisX);
                     }
                 }
             }
@@ -46,8 +48,17 @@ namespace Nightingale.Charts
 
         public override Shape Create(SeriesValue value)
         {
-            var dotPaint = CreateDotPaint(value);
-            var point = CreatePoint(value);
+            var factory = calculationFactory as LineCalculationFactory;
+
+            var dotPaint = new SKPaint
+            {
+                Color = !value.Colour.Equals(SKColor.Empty) ? value.Colour : GetDefaultColour(value),
+                StrokeWidth = 20,
+                TextSize = TextSize,
+                TextAlign = SKTextAlign.Center
+            };
+
+            var point = new SKPoint(factory.CalculateBarStartingPoint(Series.IndexOf(value)), factory.CalculateTop(value));
 
             if (!value.Focused && shapeTouched)
             {
