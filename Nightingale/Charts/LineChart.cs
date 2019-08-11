@@ -26,17 +26,17 @@ namespace Nightingale.Charts
 
         protected override void DrawChart()
         {
-            foreach (var shape in shapes)
+            foreach (var shape in Shapes)
             {
                 var p = shape as Point;
                 p.Draw();
 
-                var currentIndex = shapes.IndexOf(shape);
+                var currentIndex = Shapes.IndexOf(shape);
 
                 if (currentIndex > 0)
                 {
                     p.JoinPoints();
-                    var previousElement = shapes.ElementAt(currentIndex - 1) as Point;
+                    var previousElement = Shapes.ElementAt(currentIndex - 1) as Point;
 
                     if (RenderArea)
                     {
@@ -73,7 +73,7 @@ namespace Nightingale.Charts
                 SerieValue = value,
                 LabelPosition = new SKPoint(point.X, CanvasSize.Height - 40),
                 ValuePosition = new SKPoint(point.X, CanvasSize.Height - 10),
-                Related = shapes.Count > 0 ? shapes.Last() as Point : null
+                Related = Shapes.Count > 0 ? Shapes.Last() as Point : null
             };
         }
     }

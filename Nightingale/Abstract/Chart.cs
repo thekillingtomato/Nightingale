@@ -21,7 +21,6 @@ namespace Nightingale
         protected float avaibleWidth;
         protected PaletteColour palette = new PaletteColour();
         protected IEnumerable<SKColor> defaultColours;
-        protected List<Shape> shapes = new List<Shape>();
         protected bool shapeTouched;
         protected float sigma;
         protected int fullSigma = 10;
@@ -39,6 +38,8 @@ namespace Nightingale
             BindableProperty.Create(nameof(Series), typeof(List<SeriesValue>), typeof(Chart), new List<SeriesValue>(), propertyChanged: OnBindablePropertyChanged);
 
         public float TextSize { get; set; } = 12;
+
+        internal List<Shape> Shapes = new List<Shape>();
 
         public List<SeriesValue> Series
         {
@@ -86,9 +87,9 @@ namespace Nightingale
 
         public virtual void PopulateShapes()
         {
-            shapes.Clear();
+            Shapes.Clear();
 
-            shapes.AddRange(Series.Select(x => Create(x)));
+            Shapes.AddRange(Series.Select(x => Create(x)));
         }
 
         public abstract Shape Create(SeriesValue value);
@@ -134,12 +135,12 @@ namespace Nightingale
         {
             if (e.ActionType.Equals(SKTouchAction.Pressed))
             {
-                foreach (var shape in shapes)
+                foreach (var shape in Shapes)
                 {
                     shape.Focused = shape.ContainsPoint(e.Location);
                 }
 
-                shapeTouched = shapes.Any(x => x.Focused);
+                shapeTouched = Shapes.Any(x => x.Focused);
                 if (shapeTouched)
                 {
                     Task.Run(async () => await AnimatedBlur());

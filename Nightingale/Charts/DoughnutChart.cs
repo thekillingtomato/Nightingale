@@ -1,6 +1,6 @@
-﻿using Nightingale.Figures;
+﻿using Nightingale.Calculations;
+using Nightingale.Figures;
 using SkiaSharp;
-using System.Linq;
 
 namespace Nightingale.Charts
 {
@@ -8,7 +8,8 @@ namespace Nightingale.Charts
     {
         public override Shape Create(SeriesValue seriesValue)
         {
-            float sweepAngle = 360f * seriesValue.Value / Series.Sum(x => x.Value);
+            var factory = calculationFactory as PieChartCalculationFactory;
+
             var paint = new SKPaint
             {
                 StrokeWidth = 40,
@@ -16,7 +17,7 @@ namespace Nightingale.Charts
                 Color = seriesValue.HasColour() ? seriesValue.Colour : GetDefaultColour(seriesValue),
             };
 
-            var labelPosition = new SKPoint(GetXAxisFor(seriesValue), GetYAxisFor(seriesValue));
+            var labelPosition = new SKPoint(factory.CalculateLabelXAxis(seriesValue), factory.CalculateLabelYAxis(seriesValue));
             var leftSide = Series.IndexOf(seriesValue) % 2 == 0;
 
             var text = leftSide ?
@@ -31,12 +32,6 @@ namespace Nightingale.Charts
 
             var textPaint = new SKPaint { Color = paint.Color };
 
-            if (Series.IndexOf(seriesValue) > 0)
-            {
-                var previous = shapes.Last() as Arc;
-                StartAngle += previous.SweepAngle;
-            }
-
             if (!seriesValue.Focused && shapeTouched)
             {
                 SKBlurStyle blurStyle = SKBlurStyle.Normal;
@@ -50,8 +45,8 @@ namespace Nightingale.Charts
                 CenterRect = CenterRect,
                 Paint = paint,
                 LabelPosition = labelPosition,
-                StartAngle = StartAngle,
-                SweepAngle = sweepAngle,
+                StartAngle = factory.CalculateStartAngle(),
+                SweepAngle = factory.CalculateSweepAngle(seriesValue),
                 Text = text,
                 TextPaint = textPaint
             };
@@ -59,8 +54,7 @@ namespace Nightingale.Charts
 
         protected override void DrawChart()
         {
-            StartAngle = 0;
-            foreach (var shape in shapes)
+            foreach (var shape in Shapes)
             {
                 shape.Draw();
             }

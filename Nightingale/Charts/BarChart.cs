@@ -47,7 +47,7 @@ namespace Nightingale.Charts
 
         protected override void DrawChart()
         {
-            foreach (var shape in shapes)
+            foreach (var shape in Shapes)
             {
                 shape.Draw();
             }
