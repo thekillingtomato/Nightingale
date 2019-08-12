@@ -1,4 +1,5 @@
 ﻿using Nightingale.Calculations;
+using Nightingale.Drawable;
 using Nightingale.Figures;
 using SkiaSharp;
 using SkiaSharp.Views.Forms;
@@ -15,12 +16,10 @@ namespace Nightingale
         protected SKCanvas canvas;
         protected SKImageInfo info;
         protected SKSurface surface;
-        protected PaletteColour palette = new PaletteColour();
-        protected IEnumerable<SKColor> defaultColours;
-        protected bool shapeTouched;
-        protected float sigma;
+
         protected int fullSigma = 10;
         internal MainCalculationFactory calculationFactory;
+        internal MainDrawableFactory mainDrawableFactory;
 
         public Chart()
         {
@@ -34,6 +33,8 @@ namespace Nightingale
             BindableProperty.Create(nameof(Series), typeof(List<SeriesValue>), typeof(Chart), new List<SeriesValue>(), propertyChanged: OnBindablePropertyChanged);
 
         public float TextSize { get; set; } = 12;
+
+        public float Sigma { get; private set; } = 0;
 
         internal List<Shape> Shapes = new List<Shape>();
 
@@ -51,9 +52,17 @@ namespace Nightingale
 
         public bool AllPositive => Series.All(x => x.Value >= 0);
 
+        public bool HasShapeFocused => Series.Any(x => x.Focused);
+
+        protected bool UseCaption() => Series.All(x => !string.IsNullOrEmpty(x.Caption));
+
         protected abstract void DrawChart();
 
         public abstract Shape Create(SeriesValue value);
+
+        internal virtual MainCalculationFactory CreateFactory() => new MainCalculationFactory(this);
+
+        internal virtual MainDrawableFactory CreateDrawableFactory() => new MainDrawableFactory(calculationFactory, this);
 
         private void OnPaintSurface(object sender, SKPaintSurfaceEventArgs e)
         {
@@ -63,39 +72,28 @@ namespace Nightingale
 
             canvas.Clear();
 
+            Shapes.Clear();
+
             if (Series.NotNullNorEmpty())
             {
                 calculationFactory = CreateFactory();
 
-                defaultColours = palette.GetColours(Series.Count);
+                mainDrawableFactory = CreateDrawableFactory();
 
-                PopulateShapes();
+                Shapes.AddRange(Series.Select(x => Create(x)));
 
                 DrawChart();
             }            
         }
 
-        internal virtual MainCalculationFactory CreateFactory() => new MainCalculationFactory(this);
-
-        public virtual void PopulateShapes()
-        {
-            Shapes.Clear();
-
-            Shapes.AddRange(Series.Select(x => Create(x)));
-        }
-
-        protected SKColor GetDefaultColour(SeriesValue value) => defaultColours.ElementAt(Series.IndexOf(value));
-
-        protected bool UseCaption() => Series.All(x => !string.IsNullOrEmpty(x.Caption));
-
         protected async Task AnimatedBlur()
         {
-            sigma = 0;
+            Sigma = 0;
             for (int i = 0; i < fullSigma; i++)
             {
                 await Task.Delay(25);
 
-                sigma += (float)i / 4;
+                Sigma += (float)i / 4;
                 InvalidateSurface();
             }
         }
@@ -109,8 +107,7 @@ namespace Nightingale
                     shape.Focused = shape.ContainsPoint(e.Location);
                 }
 
-                shapeTouched = Shapes.Any(x => x.Focused);
-                if (shapeTouched)
+                if (Shapes.Any(x => x.Focused))
                 {
                     Task.Run(async () => await AnimatedBlur());
                 }

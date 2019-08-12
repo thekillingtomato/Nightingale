@@ -1,4 +1,5 @@
 ﻿using Nightingale.Calculations;
+using Nightingale.Drawable;
 using Nightingale.Figures;
 using SkiaSharp;
 using SkiaSharp.Views.Forms;
@@ -23,6 +24,8 @@ namespace Nightingale.Charts
             });
 
         internal override MainCalculationFactory CreateFactory() => new LineCalculationFactory(this);
+
+        internal override MainDrawableFactory CreateDrawableFactory() => new LineDrawableFactory(calculationFactory, this);
 
         protected override void DrawChart()
         {
@@ -50,21 +53,11 @@ namespace Nightingale.Charts
         {
             var factory = calculationFactory as LineCalculationFactory;
 
-            var dotPaint = new SKPaint
-            {
-                Color = !value.Colour.Equals(SKColor.Empty) ? value.Colour : GetDefaultColour(value),
-                StrokeWidth = 20,
-                TextSize = TextSize,
-                TextAlign = SKTextAlign.Center
-            };
+            var drawableFactory = mainDrawableFactory as LineDrawableFactory;
+
+            var dotPaint = drawableFactory.CreateDotPaint(value);
 
             var point = new SKPoint(factory.CalculateBarStartingPoint(Series.IndexOf(value)), factory.CalculateTop(value));
-
-            if (!value.Focused && shapeTouched)
-            {
-                SKBlurStyle blurStyle = SKBlurStyle.Normal;
-                dotPaint.MaskFilter = SKMaskFilter.CreateBlur(blurStyle, sigma);
-            }
 
             return new Point(canvas)
             {

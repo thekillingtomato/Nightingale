@@ -48,5 +48,7 @@ namespace Nightingale.Calculations
 
             return chart.TextSize * 2 * start;
         }
+
+        public float CalculatePercentage(SeriesValue value) => value.Value * 100 / chart.Series.Sum(x => x.Value);
     }
 }
