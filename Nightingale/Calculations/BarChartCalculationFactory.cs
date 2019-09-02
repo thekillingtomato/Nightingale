@@ -1,10 +1,9 @@
-﻿using System;
-
-namespace Nightingale.Calculations
+﻿namespace Nightingale.Calculations
 {
-    internal class BarChartCalculationFactory : MainCalculationFactory
+    internal abstract class BarChartCalculationFactory : MainCalculationFactory
     {
-        public BarChartCalculationFactory(Chart chart) : base(chart)
+        public BarChartCalculationFactory(Chart chart) 
+            : base(chart)
         {
             MeasureBarSizeAndDistance();
         }
@@ -15,37 +14,29 @@ namespace Nightingale.Calculations
             MarginY = chart.CanvasSize.Height * (chart.AllNegatives || chart.AllPositive ? 25 : 15) / 100;
         }
 
-        private void MeasureBarSizeAndDistance()
-        {
-            SpaceBetweenBars = (AvaibleWidth / chart.Series.Count) / 4;
-            BarSize = (AvaibleWidth - (SpaceBetweenBars * (chart.Series.Count * 2))) / chart.Series.Count;
-        }
+        protected abstract void MeasureBarSizeAndDistance();
 
-        public float SpaceBetweenBars { get; private set; }
+        public float SpaceBetweenBars { get; protected set; }
 
-        public float BarSize { get; private set; }
+        public float BarSize { get; protected set; }
 
         public float CalculateBarStartingPoint(int index)
         {
             return (index * BarSize + SpaceBetweenBars) * 2;
         }
 
-        public float CalculateLeft(float barStartingPoint)
-        {
-            return barStartingPoint - (BarSize / 2);
-        }
+        public abstract float CalculateLeft(float barStartingPoint);
 
-        public float CalculateRight(float barStartingPoint)
-        {
-            return barStartingPoint + (BarSize / 2);
-        }
+        public abstract float CalculateRight(float barStartingPoint);
 
-        public float CalculateTop(SeriesValue value)
-        {
-            var percentage = value.Value / (chart.MaxEntryValue / AxisX) * 100 / AxisX;
-            var increaseHeight = Math.Abs(percentage * ((chart.AllNegatives ? -AvaibleHeight : -MarginY) + AxisX) / 100);
-            var result = AxisX - (value.Value > 0 ? increaseHeight : -increaseHeight);
-            return result;
-        }
+        public abstract float CalculateRight(SeriesValue value);
+
+        public abstract float CalculateBottom();
+
+        public abstract float CalculateBottom(float barStartingPoint);
+
+        public abstract float CalculateTop(float barStartingPoint);
+
+        public abstract float CalculateTop(SeriesValue value);
     }
 }

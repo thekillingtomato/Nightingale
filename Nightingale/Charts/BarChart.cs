@@ -6,8 +6,6 @@ namespace Nightingale.Charts
 {
     public class BarChart : Chart
     {
-        internal override MainCalculationFactory CreateFactory() => new BarChartCalculationFactory(this);
-
         internal override MainDrawableFactory CreateDrawableFactory() => new BarDrawableFactory(calculationFactory as BarChartCalculationFactory, this);
 
         public override Shape Create(SeriesValue value)

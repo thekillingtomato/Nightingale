@@ -36,5 +36,10 @@
                         (chart.AllNegatives || chart.AllPositive ? MarginY : AvaibleHeight / 2) :
                         AvaibleHeight;
         }
+
+        public float CalculateTopAxisY()
+        {
+            return chart.CanvasSize.Height - AvaibleHeight;
+        }
     }
 }
