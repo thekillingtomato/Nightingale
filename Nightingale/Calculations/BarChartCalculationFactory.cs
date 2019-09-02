@@ -25,6 +25,10 @@
             return (index * BarSize + SpaceBetweenBars) * 2;
         }
 
+        public virtual float GetLabelPointY () => chart.CanvasSize.Height - 40;
+
+        public virtual float GetLabelValuePointY() => chart.CanvasSize.Height - 10;
+
         public abstract float CalculateLeft(float barStartingPoint);
 
         public abstract float CalculateRight(float barStartingPoint);

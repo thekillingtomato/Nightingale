@@ -7,7 +7,7 @@ namespace Nightingale.Calculations
         public HorizontalBarChartCalculationFactory(Chart chart) 
             : base(chart)
         {
-            AxisY = MarginY;
+
         }
 
         public override float CalculateLeft(float barStartingPoint) => AxisY;
@@ -15,7 +15,8 @@ namespace Nightingale.Calculations
         public override float CalculateRight(SeriesValue value)
         {
             var percentage = value.Value / (chart.MaxEntryValue / AvaibleWidth) * 100 / AvaibleWidth;
-            var increase = Math.Abs(percentage * ((chart.AllNegatives ? -AvaibleWidth : AvaibleWidth) + AxisY) / 100);
+            var increase = Math.Abs(percentage * (chart.AllNegatives ? -AvaibleWidth : AvaibleWidth) / 100);
+            increase += AxisY;
             var result = value.Value > 0 ? increase : -increase;
             return result;
         }
@@ -36,6 +37,16 @@ namespace Nightingale.Calculations
             MarginY = chart.CanvasSize.Height * 10 / 100;
             MarginX = chart.CanvasSize.Width * 15 / 100;
         }
+
+        protected override void MeasureAxis()
+        {
+            base.MeasureAxis();
+            AxisY = MarginX / 2;
+        }
+
+        public override float GetLabelPointY() => MarginY;
+
+        public override float GetLabelValuePointY() => chart.CanvasSize.Width - (MarginY / 2);
 
         public override float CalculateRight(float barStartingPoint) => throw new NotImplementedException();
 

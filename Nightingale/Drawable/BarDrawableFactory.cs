@@ -79,7 +79,9 @@ namespace Nightingale.Drawable
 
             var barStartingPoint = calculationFactory.CalculateBarStartingPoint(chart.Series.IndexOf(value));
 
-            return new SKPoint(barStartingPoint, chart.CanvasSize.Height - 40);
+            return factory is VerticalBarChartCalculationFactory ?
+                new SKPoint(barStartingPoint, calculationFactory.GetLabelPointY()) :
+                new SKPoint(calculationFactory.GetLabelPointY(), barStartingPoint);
         }
 
         public SKPoint CreateValuePointPosition(SeriesValue value)
@@ -88,7 +90,9 @@ namespace Nightingale.Drawable
 
             var barStartingPoint = calculationFactory.CalculateBarStartingPoint(chart.Series.IndexOf(value));
 
-            return new SKPoint(barStartingPoint, chart.CanvasSize.Height - 10);
+            return factory is VerticalBarChartCalculationFactory ? 
+                new SKPoint(barStartingPoint, calculationFactory.GetLabelValuePointY()) :
+                new SKPoint(calculationFactory.GetLabelValuePointY(), barStartingPoint);
         }
     }
 }
