@@ -14,11 +14,22 @@ namespace Nightingale.Calculations
 
         public override float CalculateRight(SeriesValue value)
         {
-            var percentage = value.Value / (chart.MaxEntryValue / AvaibleWidth) * 100 / AvaibleWidth;
-            var increase = Math.Abs(percentage * (chart.AllNegatives ? -AvaibleWidth : AvaibleWidth) / 100);
-            increase += AxisY;
-            var result = value.Value > 0 ? increase : -increase;
-            return result;
+            var percentage = Math.Abs(value.Value / (chart.MaxEntryValue / AvaibleWidth) * 100 / AvaibleWidth);
+
+            if (!chart.HasNegativeValues)
+            {
+                var increase = Math.Abs(percentage * AvaibleWidth / 100);
+                increase += AxisY;
+                return increase;
+            }
+            else
+            {
+                var middlePoint = (AvaibleWidth / 2);
+                var increase = Math.Abs((percentage * middlePoint) / 100);
+                var direction = value.Value > 0 ? increase : -increase;
+                var result = AxisY + direction;
+                return result;
+            }            
         }
 
         public override float CalculateBottom(float barStartingPoint) => barStartingPoint - (BarSize / 2);
@@ -41,7 +52,7 @@ namespace Nightingale.Calculations
         protected override void MeasureAxis()
         {
             base.MeasureAxis();
-            AxisY = MarginX / 2;
+            AxisY = chart.HasNegativeValues ? chart.CanvasSize.Width / 2 : MarginX / 2;
         }
 
         public override float GetLabelPointY() => MarginY;
