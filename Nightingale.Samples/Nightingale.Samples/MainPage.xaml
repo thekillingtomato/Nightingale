@@ -13,7 +13,7 @@
                              BackgroundColor="#202020"  HeightRequest="250" Margin="10,10,10,10"/>
             <charts:HorizontalBarChart 
                              x:Name="horizontalBarChart" Series="{Binding Entries}" 
-                             BackgroundColor="#202020"  HeightRequest="250" Margin="10,10,10,10"/>
+                             BackgroundColor="#202020"  HeightRequest="250" Margin="10,10,10,10" TextSize="20"/>
             <charts:LineChart x:Name="lineChartWArea" Series="{Binding Entries}" RenderArea="True" 
                              BackgroundColor="#202020" HeightRequest="250" Margin="10,10,10,10" TextSize="20"/>
             <charts:DoughnutChart x:Name="doughnutChart" Series="{Binding Entries}" 

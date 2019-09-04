@@ -46,7 +46,7 @@ namespace Nightingale.Calculations
         {
             base.MeasureMargins();
             MarginY = chart.CanvasSize.Height * 10 / 100;
-            MarginX = chart.CanvasSize.Width * 15 / 100;
+            MarginX = chart.CanvasSize.Width * 20 / 100;
         }
 
         protected override void MeasureAxis()
@@ -57,7 +57,7 @@ namespace Nightingale.Calculations
 
         public override float GetLabelPointY() => MarginY;
 
-        public override float GetLabelValuePointY() => chart.CanvasSize.Width - (MarginY / 2);
+        public override float GetLabelValuePointY() => chart.CanvasSize.Width - (MarginX / 4);
 
         public override float CalculateRight(float barStartingPoint) => throw new NotImplementedException();
 
